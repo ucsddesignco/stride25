@@ -1,0 +1,12 @@
+footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #B8E5ED;
+    font-size: 0.8rem;
+    padding: 2rem 1rem;
+    font-weight: 500;
+    @media(max-width: 393px){
+        flex-direction: column;
+    }
+}

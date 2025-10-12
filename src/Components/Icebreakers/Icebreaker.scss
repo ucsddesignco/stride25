@@ -1,0 +1,34 @@
+#icebreaker{
+    margin-top: 1rem;
+    font-family: 'Bricolage Grotesque';
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #D3F4FA;
+
+
+    h2 {
+        font-family: 'Bricolage Grotesque';
+        font-size: 2rem;
+    }
+
+    div{
+        background-color: #2A5A7C;
+        width: 1040px;
+        height: 491px;
+    }
+
+    h1{
+        font-family: 'Bricolage Grotesque';
+        font-size: 5rem;
+        margin-bottom: 1rem;
+        font-weight: 400;
+    }
+
+    .priceHero{
+        flex-direction: row-reverse;
+        padding: 8px 15px;
+
+    }
+}
