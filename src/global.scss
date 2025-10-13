@@ -15,41 +15,8 @@
 
 @font-face {
   font-family: 'Bricolage Grotesque';
-  src: url('/fonts/BricolageGrotesque-Bold.woff2') format('woff2');
-  font-weight: 500;
-  font-style: normal;
-  // If my custom font isn’t ready yet, just show the text using a default system font first, and swap in the custom font once it’s loaded.
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Bricolage Grotesque';
-  src: url('/fonts/BricolageGrotesque-ExtraBold.woff2') format('woff2');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Bricolage Grotesque';
-  src: url('/fonts/BricolageGrotesque-ExtraLight.woff2') format('woff2');
-  font-weight: 200;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Bricolage Grotesque';
-  src: url('/fonts/BricolageGrotesque-Medium.woff2') format('woff2');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Bricolage Grotesque';
   src: url('/fonts/BricolageGrotesque-Light.woff2') format('woff2');
-  font-weight: 300;
+  font-weight: 200;
   font-style: normal;
   font-display: swap;
 }
@@ -64,6 +31,14 @@
 
 @font-face {
   font-family: 'Bricolage Grotesque';
+  src: url('/fonts/BricolageGrotesque-Medium.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Bricolage Grotesque';
   src: url('/fonts/BricolageGrotesque-SemiBold.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
@@ -71,8 +46,25 @@
 }
 
 
-// Reddit Sans
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  src: url('/fonts/BricolageGrotesque-Bold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  // If my custom font isn’t ready yet, just show the text using a default system font first, and swap in the custom font once it’s loaded.
+  font-display: swap;
+}
 
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  src: url('/fonts/BricolageGrotesque-ExtraBold.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+// Reddit Sans
 
 @font-face {
   font-family: "Reddit Sans";
@@ -93,20 +85,20 @@
 
 @font-face {
   font-family: "Reddit Sans";
+  src: url(/fonts/RedditSans-SemiBold.woff2);
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Reddit Sans";
   src: url(/fonts/RedditSans-Bold.woff2);
   font-weight: bold;
   font-style: normal;
   font-display: swap;
 }
 
-
-@font-face {
-  font-family: "Reddit Sans";
-  src: url(/fonts/RedditSans-SemiBold.woff2);
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
 
 
 
