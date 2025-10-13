@@ -1,0 +1,50 @@
+#faq{
+    margin-top: 5rem;
+    padding: 0 6rem;
+    @media(max-width:766px){
+        padding: 0 4rem;
+    }
+    .faqText{
+        color: #B8E5ED;
+        h1{
+            font-family: "Bricolage Grotesque";
+            font-weight: bold;
+        }
+        p{
+            font-size: 0.75rem;
+            font-family: "Bricolage Grotesque";
+            font-weight: normal;
+
+            span{
+                text-decoration: underline;
+            }
+        }
+    }
+    .accordionContainer{
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        @media (max-width: 766px){
+            flex-direction: column;
+            // padding: 0 4rem;
+            gap: 0.75rem;
+        }
+        .accordion1,.accordion2{
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            
+            div{
+                
+                color: #B8E5ED;
+                border-radius: 0.5rem;
+                background-color: #0B273E;
+            }
+    
+            span, p {
+                font-family: "Reddit Sans";
+            }
+        }
+    }
+
+}
