@@ -16,7 +16,7 @@
 @font-face {
   font-family: 'Bricolage Grotesque';
   src: url('/fonts/BricolageGrotesque-Light.woff2') format('woff2');
-  font-weight: 200;
+  font-weight: 100;
   font-style: normal;
   font-display: swap;
 }
@@ -24,7 +24,7 @@
 @font-face {
   font-family: 'Bricolage Grotesque';
   src: url('/fonts/BricolageGrotesque-Regular.woff2') format('woff2');
-  font-weight: normal;
+  font-weight: normal; //400
   font-style: normal;
   font-display: swap;
 }
@@ -40,7 +40,7 @@
 @font-face {
   font-family: 'Bricolage Grotesque';
   src: url('/fonts/BricolageGrotesque-SemiBold.woff2') format('woff2');
-  font-weight: 400;
+  font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
@@ -58,7 +58,7 @@
 @font-face {
   font-family: 'Bricolage Grotesque';
   src: url('/fonts/BricolageGrotesque-ExtraBold.woff2') format('woff2');
-  font-weight: bold;
+  font-weight: bold; //700
   font-style: normal;
   font-display: swap;
 }
@@ -99,10 +99,6 @@
   font-display: swap;
 }
 
-
-
-
-
 * {
   margin: 0;
 }
@@ -115,7 +111,8 @@
 
 html {
   font-family:
-    'Funnel Sans',
+    'Bricolage Grotesque',
+    'Reddit Sans'
     system-ui,
     -apple-system,
     BlinkMacSystemFont,
@@ -170,7 +167,8 @@ h4,
 h5,
 h6 {
   font-family:
-    'Funnel Display',
+  'Bricolage Grotesque',
+  'Reddit Sans'
     system-ui,
     -apple-system,
     BlinkMacSystemFont,
