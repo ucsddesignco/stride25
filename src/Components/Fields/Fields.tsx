@@ -12,20 +12,29 @@ const fieldsData = [
 export default function Fields() {
   const [emblaRef] = useEmblaCarousel({
     loop: false,
-    dragFree: true, 
-    containScroll: "trimSnaps", 
+    dragFree: true,
+    containScroll: "trimSnaps",
   });
 
   return (
-    <div className="fields-wrapper">
-      <div className="fields-container embla" ref={emblaRef}>
-        <div className="embla__container">
-          {fieldsData.map((field, index) => (
-            <div className="embla__slide field-card" key={index}>
-              <img src={field.image} alt={field.text} className="field-image" />
-              <p className="field-text">{field.text}</p>
-            </div>
-          ))}
+    <div className="fields">
+      <p className="fields-title">
+        Discover Fields Dedicated to Craft & Problem Solving
+      </p>
+      <div className="fields-wrapper">
+        <div className="fields-container embla" ref={emblaRef}>
+          <div className="embla__container">
+            {fieldsData.map((field, index) => (
+              <div className="embla__slide field-card" key={index}>
+                <img
+                  src={field.image}
+                  alt={field.text}
+                  className="field-image"
+                />
+                <p className="field-text">{field.text}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
