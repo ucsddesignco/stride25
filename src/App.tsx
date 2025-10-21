@@ -13,8 +13,8 @@ function App() {
     <>
     <Navbar/>
     <Hero/>
-    <Fields/>
     <Schedule/>
+    <Fields/>
     <Accordion/>
     <Icebreaker/>
     <Footer/>
