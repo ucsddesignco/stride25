@@ -1,0 +1,74 @@
+.fields {
+  padding: 2rem 0;
+}
+
+.fields-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.fields-container {
+  padding: 0 6rem;
+  overflow: hidden;
+}
+
+.fields-title {
+  color: #b8e5ed;
+  font-size: 2rem;
+  font-family: "Bricolage Grotesque";
+  font-weight: 700;
+  padding: 3.75rem 6rem 1.8rem 6rem;
+}
+
+.embla__container {
+  display: flex;
+  gap: 12px;
+}
+
+.field-card {
+  background-color: #0b273e;
+  color: #b8e5ed;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-family: "Reddit Sans";
+  flex: 0 0 auto;
+  width: clamp(200px, 40vw, 240px);
+  height: 18rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 1rem;
+
+  .field-image {
+    width: 80%;
+    height: 70%;
+    object-fit: contain;
+    margin-bottom: auto;
+  }
+
+  .field-text {
+    text-align: center;
+    margin-top: 0.5rem;
+  }
+}
+
+@media (min-width: 1440px) {
+  .fields-container {
+    overflow: visible;
+
+    .embla__container {
+      flex-wrap: wrap;
+    }
+
+    .field-card {
+      flex: 1 1;
+      transition: transform 0.2s ease;
+
+      &:hover {
+        transform: translateY(-4px);
+      }
+    }
+  }
+}
