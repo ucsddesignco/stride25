@@ -33,13 +33,20 @@ export const buildMesh = (
   let globalGroupId = 0;
 
   for (let layer = 0; layer < layerCount; layer++) {
+    // Create a layer-specific random seed to ensure each layer has a unique pattern
+    let layerSeed = layer * 12345 + 67890; // Simple but effective seeding
+    const layerRandom = () => {
+      layerSeed = (layerSeed * 1664525 + 1013904223) % 4294967296;
+      return layerSeed / 4294967296;
+    };
+
     const groups: { id: number; cells: { i: number; j: number }[] }[] = [];
     let gid = 0;
 
     for (let j = 0; j < rows; j++) {
       for (let i = 0; i < cols; i++) {
-        let sx = Math.random() < 0.6 ? 2 : 1;
-        let sy = Math.random() < 0.6 ? 2 : 1;
+        let sx = layerRandom() < 0.6 ? 2 : 1;
+        let sy = layerRandom() < 0.6 ? 2 : 1;
         if (i + sx > cols) sx = 1;
         if (j + sy > rows) sy = 1;
         const cells: { i: number; j: number }[] = [];
@@ -61,7 +68,7 @@ export const buildMesh = (
         const p10 = pts[idx(c.i + 1, c.j)];
         const p01 = pts[idx(c.i, c.j + 1)];
         const p11 = pts[idx(c.i + 1, c.j + 1)];
-        const diag = Math.random() > 0.5;
+        const diag = layerRandom() > 0.5;
         const triDefs = diag
           ? [
               { a: p00, b: p10, c: p11, au: p00, bu: p10, cu: p11 },
@@ -101,13 +108,13 @@ export const buildMesh = (
       ux /= gv.uv.length; uy /= gv.uv.length;
       const mass = Math.max(0.001, gv.verts.length / 3 * 0.002);
 
-      const colorShift = 0.5;
-      const roughness = 0.3;
-      const reflectivity = 0.4;
-      const materialType = 0.5;
+      const colorShift = 0.3 + layerRandom() * 0.4; // 0.3 to 0.7
+      const roughness = 0.2 + layerRandom() * 0.3; // 0.2 to 0.5
+      const reflectivity = 0.3 + layerRandom() * 0.4; // 0.3 to 0.7
+      const materialType = 0.3 + layerRandom() * 0.4; // 0.3 to 0.7
 
       const depth = (layer * params.layerSpacing) - (layerCount - 1) * params.layerSpacing / 2;
-      const initialBrightness = layer === 0 ? 1.0 : 0.3;
+      const initialBrightness = 1.0;
 
       groupsBuilt.push({
         id: globalGroupId + gv.id,
@@ -139,7 +146,7 @@ export const buildMesh = (
         const p10 = pts[idx(c.i + 1, c.j)];
         const p01 = pts[idx(c.i, c.j + 1)];
         const p11 = pts[idx(c.i + 1, c.j + 1)];
-        const diag = Math.random() > 0.5;
+        const diag = layerRandom() > 0.5;
         const triSets = diag ? [[p00, p10, p11], [p00, p11, p01]] : [[p00, p10, p01], [p10, p11, p01]];
         for (const tv of triSets) {
           const toClip = (p: Vec2): Vec2 => ({ x: (p.x - 0.5) * 2, y: (0.5 - p.y) * 2 });

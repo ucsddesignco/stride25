@@ -108,7 +108,7 @@ export const ShatterCanvas: React.FC<ShatterCanvasProps> = ({ params, onParamsCh
           id: newId,
           layerId: newLayerId,
           depth: currentGroups.length * params.layerSpacing,
-          brightness: 0.1,
+          brightness: 1.0,
           isActive: true,
           isShattered: false
         };
