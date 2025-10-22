@@ -33,16 +33,25 @@ const Schedule = () => {
                   <span className="bullet">
                     <Diamond />
                   </span>
-                  <p>Illumina Talk</p>
+                  <p>CheckRx Talk</p>
                 </div>
-                <p>11:30 AM</p>
+                <p>11:00 AM</p>
               </div>
               <div className="item">
                 <div className="item-name">
                   <span className="bullet">
                     <Diamond />
                   </span>
-                  <p>AoPS Talk</p>
+                  <p>Illumina Talk</p>
+                </div>
+                <p>12:00 PM</p>
+              </div>
+              <div className="item">
+                <div className="item-name">
+                  <span className="bullet">
+                    <Diamond />
+                  </span>
+                  <p>Student Panel</p>
                 </div>
                 <p>1:00 PM</p>
               </div>
@@ -95,16 +104,25 @@ const Schedule = () => {
                   <span className="bullet">
                     <Diamond />
                   </span>
-                  <p>Illumina Talk</p>
+                  <p>CheckRx Talk</p>
                 </div>
-                <p>11:30 AM</p>
+                <p>11:00 AM</p>
               </div>
               <div className="item">
                 <div className="item-name">
                   <span className="bullet">
                     <Diamond />
                   </span>
-                  <p>AoPS Talk</p>
+                  <p>Illumina Talk</p>
+                </div>
+                <p>12:00 PM</p>
+              </div>
+              <div className="item">
+                <div className="item-name">
+                  <span className="bullet">
+                    <Diamond />
+                  </span>
+                  <p>Student Panel</p>
                 </div>
                 <p>1:00 PM</p>
               </div>
