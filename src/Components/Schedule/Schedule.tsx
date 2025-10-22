@@ -77,8 +77,8 @@ const Schedule = () => {
               </span>
             </div>
             <div className="schedule-img">
-            <img src="./images/Schedule/ScheduleImg.jpg"></img>
-          </div>
+              <img src="./images/Schedule/ScheduleImg.jpg"></img>
+            </div>
 
             <div className="times">
               <div className="item">
