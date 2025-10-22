@@ -16,13 +16,24 @@
         font-weight: 500;
     }
 
-    .sqaure{
-        // border: 2px solid red;
+    .canvas-wrapper{
         background-color: #2A5A7C;
         width: 1240px;
         height: 491px;
         border-radius: 0.5rem;
         margin-top: 0.75rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .noise-overlay{
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background-image: url('/noise.png');
+        background-size: cover;
+        opacity: 0.08;
+        z-index: 1;
     }
 
     h1{
