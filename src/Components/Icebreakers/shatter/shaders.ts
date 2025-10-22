@@ -17,9 +17,16 @@ attribute float a_brightness; // per-triangle brightness multiplier
 uniform float u_ratio; // canvas width/height
 uniform vec2 u_resolution; // screen resolution
 uniform float u_layerOpacity; // layer opacity for blending
+// Color control uniforms
+uniform vec3 u_iceTopColor;
+uniform vec3 u_iceMiddleColor;
+uniform vec3 u_iceBottomColor;
+uniform vec3 u_iceDeepColor;
+uniform float u_colorTemperature;
+uniform float u_metallicAmount;
+uniform float u_highlightIntensity;
 
 varying vec2 vUv;
-varying vec2 vScreenPos; // screen position for grain
 varying float vColorShift;
 varying float vRoughness;
 varying float vReflectivity;
@@ -35,7 +42,6 @@ void main() {
   vec2 pos = pr + a_translate;
   gl_Position = vec4(vec2(pos.x, pos.y), a_depth, 1.0);
   vUv = a_uv;
-  vScreenPos = (gl_Position.xy * 0.5 + 0.5) * u_resolution;
   vColorShift = a_colorShift;
   vRoughness = a_roughness;
   vReflectivity = a_reflectivity;
@@ -49,7 +55,6 @@ export const fragShaderSource = `
 precision highp float;
 
 varying vec2 vUv;
-varying vec2 vScreenPos; // screen position for grain
 varying float vColorShift;
 varying float vRoughness;
 varying float vReflectivity;
@@ -58,57 +63,56 @@ varying float vLayerId;
 varying float vBrightness;
 
 uniform float u_layerOpacity; // layer opacity for blending
+// Color control uniforms
+uniform vec3 u_iceTopColor;
+uniform vec3 u_iceMiddleColor;
+uniform vec3 u_iceBottomColor;
+uniform vec3 u_iceDeepColor;
+uniform float u_colorTemperature;
+uniform float u_metallicAmount;
+uniform float u_highlightIntensity;
 
-// Generate bluish gradient colors based on UV position and shard properties
+// Simplified ice color system with easy-to-manipulate parameters
 vec3 getShardColor(vec2 uv, float colorShift, float roughness, float reflectivity, float materialType) {
-  float topGradient = 1.0 - uv.y;
-  float noiseScale = 8.0 + roughness * 20.0;
-  float patternScale = 2.0 + roughness * 8.0;
-  float noise1 = fract(sin(dot(uv * noiseScale, vec2(12.9898, 78.233))) * 43758.5453);
-  float noise2 = fract(sin(dot(uv * (noiseScale * 2.0), vec2(23.1407, 2.6651))) * 43758.5453);
-  float noise3 = fract(sin(dot(uv * (noiseScale * 0.7), vec2(7.1234, 3.4567))) * 43758.5453);
-  float pattern1 = 0.5 + 0.5 * sin(uv.x * patternScale + uv.y * (patternScale * 0.6));
-  float pattern2 = 0.5 + 0.5 * sin(uv.x * (patternScale * 0.5) + uv.y * (patternScale * 1.2));
-  float pattern3 = 0.5 + 0.5 * sin(uv.x * (patternScale * 2.0) + uv.y * (patternScale * 0.3));
-  float surfaceVariation = (pattern1 * 0.4 + pattern2 * 0.3 + pattern3 * 0.3) * (0.2 + roughness * 0.4);
-  surfaceVariation += (noise1 * 0.4 + noise2 * 0.3 + noise3 * 0.3) * (0.1 + roughness * 0.3);
-  vec3 almostWhite = vec3(0.949, 0.949, 0.949);
-  vec3 lightGrayBlue = vec3(0.659, 0.780, 0.812);
-  vec3 lightSkyBlue = vec3(0.392, 0.561, 0.604);
-  vec3 mediumDustyBlue = vec3(0.094, 0.333, 0.392);
-  vec3 deepTeal = vec3(0.0, 0.216, 0.275);
-  float tempShift = (colorShift - 0.5) * 0.1;
-  almostWhite = mix(almostWhite, almostWhite * 1.05, tempShift);
-  lightGrayBlue = mix(lightGrayBlue, lightGrayBlue * 1.05, tempShift);
-  lightSkyBlue = mix(lightSkyBlue, lightSkyBlue * 1.05, tempShift);
-  mediumDustyBlue = mix(mediumDustyBlue, mediumDustyBlue * 1.05, tempShift);
-  deepTeal = mix(deepTeal, deepTeal * 1.05, tempShift);
-  float metallic = materialType;
-  almostWhite = mix(almostWhite, almostWhite * 1.1, metallic * 0.3);
-  lightGrayBlue = mix(lightGrayBlue, lightGrayBlue * 1.05, metallic * 0.2);
-  lightSkyBlue = mix(lightSkyBlue, lightSkyBlue * 1.08, metallic * 0.25);
-  mediumDustyBlue = mix(mediumDustyBlue, mediumDustyBlue * 1.05, metallic * 0.2);
-  deepTeal = mix(deepTeal, deepTeal * 1.03, metallic * 0.15);
-  vec3 color1 = mix(deepTeal, mediumDustyBlue, smoothstep(0.0, 0.3, topGradient));
-  vec3 color2 = mix(mediumDustyBlue, lightSkyBlue, smoothstep(0.1, 0.5, topGradient));
-  vec3 color3 = mix(lightSkyBlue, lightGrayBlue, smoothstep(0.3, 0.7, topGradient));
-  vec3 color4 = mix(lightGrayBlue, almostWhite, smoothstep(0.5, 0.9, topGradient));
-  vec3 finalColor = mix(color1, color2, smoothstep(0.0, 1.0, topGradient));
-  finalColor = mix(finalColor, color3, smoothstep(0.2, 1.0, topGradient));
-  finalColor = mix(finalColor, color4, smoothstep(0.4, 1.0, topGradient));
-  float brightnessVariation = 0.8 + 0.4 * surfaceVariation;
-  finalColor *= brightnessVariation;
-  finalColor = mix(finalColor, finalColor * vec3(1.1, 1.05, 0.95), surfaceVariation * 0.3);
-  float luminance = dot(finalColor, vec3(0.299, 0.587, 0.114));
-  finalColor = mix(vec3(luminance), finalColor, 1.4);
-  float highlight = smoothstep(0.6, 1.0, surfaceVariation) * (0.1 + reflectivity * 0.2);
-  finalColor += vec3(highlight);
-  float shadow = smoothstep(0.0, 0.4, 1.0 - surfaceVariation) * (0.1 + (1.0 - reflectivity) * 0.15);
-  finalColor *= (1.0 - shadow);
-  float grain = fract(sin(dot(vScreenPos * 0.5, vec2(12.9898, 78.233))) * 43758.5453);
-  grain = (grain - 0.5) * 0.02;
-  finalColor = mix(finalColor, finalColor + vec3(grain), 0.1 + roughness * 0.15);
-  return finalColor;
+  // Use uniform colors for easy manipulation
+  vec3 iceTop = u_iceTopColor;
+  vec3 iceMiddle = u_iceMiddleColor;
+  vec3 iceBottom = u_iceBottomColor;
+  vec3 iceDeep = u_iceDeepColor;
+  
+  // Create vertical gradient based on UV position
+  float gradient = 1.0 - uv.y;
+  
+  // Mix colors based on gradient position
+  vec3 baseColor;
+  if (gradient < 0.25) {
+    baseColor = mix(iceDeep, iceBottom, gradient * 4.0);
+  } else if (gradient < 0.5) {
+    baseColor = mix(iceBottom, iceMiddle, (gradient - 0.25) * 4.0);
+  } else if (gradient < 0.75) {
+    baseColor = mix(iceMiddle, iceTop, (gradient - 0.5) * 4.0);
+  } else {
+    baseColor = iceTop;
+  }
+  
+  // Apply color temperature shift (warmer/cooler)
+  float tempShift = u_colorTemperature + (colorShift - 0.5) * 0.3;
+  baseColor.r += tempShift * 0.1;
+  baseColor.b -= tempShift * 0.1;
+  
+  // Apply material type variation (metallic vs matte)
+  float metallic = materialType * u_metallicAmount;
+  baseColor = mix(baseColor, baseColor * 1.2, metallic);
+  
+  // Apply subtle surface variation based on roughness
+  float surfaceVariation = roughness * 0.2;
+  baseColor *= (0.9 + surfaceVariation);
+  
+  // Apply reflectivity highlights
+  float highlight = reflectivity * u_highlightIntensity;
+  baseColor += vec3(highlight);
+  
+  return baseColor;
 }
 
 void main() {

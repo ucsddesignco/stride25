@@ -8,13 +8,23 @@ export type Params = {
   impulse: number;
   impulseRadius: number;
   wireframe: boolean;
-  loadMyImage: () => void;
   // Layer control parameters
   layerCount: number;
   layerOpacity: number;
   layerSpacing: number;
   enableBlending: boolean;
   currentActiveLayer: number;
+  // Physics enhancement parameters
+  acceleration: number;                     // Acceleration multiplier for shattered shards (0-1)
+  accelerationDelay: number;                // Delay before acceleration starts (seconds)
+  // Color control parameters
+  iceTopColor: [number, number, number];     // RGB values for top of ice (0-1)
+  iceMiddleColor: [number, number, number];  // RGB values for middle of ice (0-1)
+  iceBottomColor: [number, number, number];  // RGB values for bottom of ice (0-1)
+  iceDeepColor: [number, number, number];    // RGB values for deep ice (0-1)
+  colorTemperature: number;                  // Color temperature shift (-1 to 1)
+  metallicAmount: number;                    // Metallic appearance (0-1)
+  highlightIntensity: number;                // Highlight intensity (0-1)
 };
 
 export type Vec2 = { x: number; y: number };

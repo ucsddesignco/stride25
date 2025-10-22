@@ -264,6 +264,15 @@ export const useWebGLRenderer = () => {
     gl.uniform1f(uniforms["u_img_ratio"], 1.0);
     gl.uniform2f(uniforms["u_resolution"], canvas.width, canvas.height);
     gl.uniform1f(uniforms["u_layerOpacity"], params.layerOpacity);
+    
+    // Set color uniforms
+    gl.uniform3f(uniforms["u_iceTopColor"], params.iceTopColor[0], params.iceTopColor[1], params.iceTopColor[2]);
+    gl.uniform3f(uniforms["u_iceMiddleColor"], params.iceMiddleColor[0], params.iceMiddleColor[1], params.iceMiddleColor[2]);
+    gl.uniform3f(uniforms["u_iceBottomColor"], params.iceBottomColor[0], params.iceBottomColor[1], params.iceBottomColor[2]);
+    gl.uniform3f(uniforms["u_iceDeepColor"], params.iceDeepColor[0], params.iceDeepColor[1], params.iceDeepColor[2]);
+    gl.uniform1f(uniforms["u_colorTemperature"], params.colorTemperature);
+    gl.uniform1f(uniforms["u_metallicAmount"], params.metallicAmount);
+    gl.uniform1f(uniforms["u_highlightIntensity"], params.highlightIntensity);
   }, []);
 
   const syncBuffersFromTriangles = useCallback((gl: WebGLRenderingContext) => {
