@@ -9,9 +9,10 @@ import { stepPhysics, explodeAt } from './physics';
 interface ShatterCanvasProps {
   params: Params;
   onParamsChange: (updates: Partial<Params>) => void;
+  onShatter?: () => void;
 }
 
-export const ShatterCanvas: React.FC<ShatterCanvasProps> = ({ params, onParamsChange }) => {
+export const ShatterCanvas: React.FC<ShatterCanvasProps> = ({ params, onParamsChange, onShatter }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const pointerRef = useRef<Vec2>({ x: 0.5, y: 0.5 });
   const globalIdCounterRef = useRef<number>(0);
@@ -161,7 +162,8 @@ export const ShatterCanvas: React.FC<ShatterCanvasProps> = ({ params, onParamsCh
     const groups = getGroups();
     const targetLayer = explodeAt(nx, ny, groups, params, handleAddNewLayer, handleRemoveLayer);
     onParamsChange({ currentActiveLayer: targetLayer });
-  }, [getGroups, onParamsChange, handleAddNewLayer, handleRemoveLayer, params]);
+    onShatter && onShatter();
+  }, [getGroups, onParamsChange, handleAddNewLayer, handleRemoveLayer, params, onShatter]);
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.code === "Space") {
