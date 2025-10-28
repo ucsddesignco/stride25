@@ -7,6 +7,7 @@
     justify-content: center;
     color: #D3F4FA;
     margin-bottom: 3rem;
+    padding: 0 6rem;
 
 
     h2 {
@@ -19,7 +20,8 @@
     .sqaure{
         // border: 2px solid red;
         background-color: #2A5A7C;
-        width: 1240px;
+        width: 100%;
+        // width: 1240px;
         height: 491px;
         border-radius: 0.5rem;
         margin-top: 0.75rem;
@@ -38,5 +40,17 @@
         flex-direction: row-reverse;
         padding: 8px 15px;
 
+    }
+}
+
+@media (min-width: 1440px) {
+    #icebreaker {
+        padding: 0 18rem;
+    }
+}
+
+@media (max-width: 766px) {
+    #icebreaker {
+        padding: 0 4rem;
     }
 }

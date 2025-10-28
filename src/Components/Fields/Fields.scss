@@ -55,15 +55,26 @@
 }
 
 @media (min-width: 1440px) {
-  .fields-container {
+  .fields-title {
+    padding: 3.75rem 18rem 1.8rem 18rem;
     overflow: visible;
-
-    .embla__container {
-      flex-wrap: wrap;
-    }
-
-    .field-card {
-      flex: 1 1;
-    }
+  }
+  .embla__container {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .fields-container {
+    width: 100%;
+    padding: 0 18rem;
+  }
+}
+@media (max-width: 766px) {
+  .fields-title {
+    padding: 3.75rem 4rem 1.8rem 4rem;
+    overflow: visible;
+  }
+  .fields-container {
+    width: 100%;
+    padding: 0 4rem;
   }
 }
