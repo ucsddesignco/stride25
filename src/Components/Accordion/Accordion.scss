@@ -1,4 +1,4 @@
-#faq{
+#faq {
     margin-top: 5rem;
     padding: 0 6rem;
     @media(max-width:766px){
@@ -22,6 +22,7 @@
     }
     .accordionContainer{
         display: flex;
+        justify-content: space-between;
         gap: 1rem;
         margin-top: 1.5rem;
         @media (max-width: 766px){
@@ -47,4 +48,10 @@
         }
     }
 
+}
+
+@media (min-width: 1441px) {
+    #faq {
+        padding: 0 18rem;
+    }
 }
