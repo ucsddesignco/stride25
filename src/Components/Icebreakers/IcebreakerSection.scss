@@ -1,4 +1,5 @@
 #icebreaker {
+
   .canvas-wrapper {
     position: relative;
 
@@ -20,6 +21,10 @@
 
     .icebreaker-overlay-text.visible {
       opacity: 1;
+    }
+
+    .icebreaker-overlay-text.no-transition {
+      transition: none;
     }
 
     .filter-overlay {

@@ -65,6 +65,7 @@ export type Group = {
   originalPos: Vec2; // original position for reset functionality
   // Visual state
   brightness: number; // brightness multiplier for newly revealed layers (0.0 to 1.0)
+  fadeAge: number; // timer for brightness easing, resets when dimming/brightening starts
 };
 
 export type AttribLocations = {

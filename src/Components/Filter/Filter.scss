@@ -154,6 +154,15 @@
   z-index: 0;
 }
 
+/* Disable initial transitions while initializing to avoid any wipe-in */
+.filter-slider[data-initializing='true'] .filter-slider-indicator {
+  transition: none !important;
+  visibility: hidden;
+}
+.filter-slider[data-initializing='true'] .filter-chip::before {
+  transition: none !important;
+}
+
 .filter-chip {
   font-family: 'Bricolage Grotesque';
   font-weight: 500;
