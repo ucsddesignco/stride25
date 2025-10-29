@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import svgPaths from "./imports/svg-fb8zz5j5no";
 import styles from "./BubbleCluster.module.css";
-import Button from "../Button/Button";
 
 interface Circle {
   id: number;
