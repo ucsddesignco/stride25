@@ -1,6 +1,19 @@
+/* Mobile Version */
 .filter-mobile {
   width: fit-content;
   position: relative;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+}
+
+.filter-desktop {
+  display: none;
+
+  @media (min-width: 768px) {
+    display: block;
+  }
 }
 
 /* Prevent text and icon selection within the FilterMobile component */
@@ -15,7 +28,6 @@
 .filter-mobile img {
   -webkit-user-drag: none;
 }
-
 
 .filter-menu {
   background-color: #477a9e;
@@ -114,6 +126,76 @@
       width: 100%;
       height: 100%;
     }
+  }
+}
+
+/* Desktop Slider Version */
+.filter-slider {
+  background-color: #477a9e;
+  padding: 4px;
+  border-radius: 8px;
+  display: flex;
+  gap: 0px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  width: fit-content;
+  position: relative;
+}
+
+.filter-slider-indicator {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  background-color: #ccedf4;
+  border-radius: 4px;
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.filter-chip {
+  font-family: 'Bricolage Grotesque';
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 28px;
+  padding: 0 16px;
+  height: 28px;
+  border-radius: 2px;
+  border: 0;
+  background: transparent;
+  color: #ccedf4;
+  cursor: pointer;
+  white-space: nowrap;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  // Dark text layer that gets clipped
+  &::before {
+    content: attr(aria-label);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    color: #09456f;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    clip-path: var(--chip-clip, inset(0 100% 0 0));
+    transition: clip-path 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  // Set the button's text content to be the accessible label
+  &[aria-label] {
+    color: #ccedf4;
   }
 }
 
