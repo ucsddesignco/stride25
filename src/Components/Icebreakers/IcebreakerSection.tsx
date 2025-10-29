@@ -10,7 +10,7 @@ import type { Params } from './shatter/types'
 const MemoizedShatterCanvas = memo(ShatterCanvas)
 
 export default function IcebreakerSection() {
-  const [selectedCategory, setSelectedCategory] = useState('Portfolio')
+  const [selectedCategory, setSelectedCategory] = useState('Introductions')
   const [showText, setShowText] = useState(false)
   const [flashKey, setFlashKey] = useState(0)
 

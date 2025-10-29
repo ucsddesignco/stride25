@@ -15,6 +15,10 @@ export default function Filter({
   const [isOpen, setIsOpen] = useState(false)
   const [isClosing, setIsClosing] = useState(false)
   const filterRef = useRef<HTMLDivElement>(null)
+  const chipRefs = useRef<(HTMLButtonElement | null)[]>([])
+  const sliderRef = useRef<HTMLDivElement>(null)
+  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 })
+  const [chipClipPaths, setChipClipPaths] = useState<Record<number, string>>({})
 
   const handleCloseMenu = () => {
     setIsClosing(true)
@@ -92,48 +96,151 @@ export default function Filter({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, isClosing])
 
+  const handleCategorySelect = (category: string) => {
+    onCategoryChange?.(category)
+  }
+
+  const selectedIndex = useMemo(() => {
+    return categories.indexOf(effectiveSelectedCategory)
+  }, [effectiveSelectedCategory, categories])
+
+  // Update indicator position and calculate clip paths for chips
+  useEffect(() => {
+    const updateIndicatorPosition = () => {
+      const selectedChip = chipRefs.current[selectedIndex]
+      if (selectedChip && sliderRef.current) {
+        const slider = sliderRef.current
+        const chipRect = selectedChip.getBoundingClientRect()
+        const sliderRect = slider.getBoundingClientRect()
+        const left = chipRect.left - sliderRect.left
+        const width = chipRect.width
+        setIndicatorStyle({ left, width })
+
+        // Calculate clip paths for all chips
+        const indicatorStart = left
+        const indicatorEnd = left + width
+        const newClipPaths: Record<number, string> = {}
+
+        chipRefs.current.forEach((chip, index) => {
+          if (chip) {
+            const chipRect = chip.getBoundingClientRect()
+            const chipStart = chipRect.left - sliderRect.left
+            const chipEnd = chipStart + chipRect.width
+            const chipWidth = chipRect.width
+
+            // Calculate how much the indicator overlaps this chip
+            const clipStart = Math.max(0, indicatorStart - chipStart)
+            const clipEnd = Math.min(chipWidth, indicatorEnd - chipStart)
+
+            if (clipStart > 0 || clipEnd < chipWidth) {
+              // There's an overlap, calculate clip-path
+              const clipLeft = (clipStart / chipWidth) * 100
+              const clipRight = 100 - (clipEnd / chipWidth) * 100
+              newClipPaths[index] = `inset(0 ${clipRight}% 0 ${clipLeft}%)`
+            } else {
+              // Fully covered or not covered
+              if (indicatorStart <= chipStart && indicatorEnd >= chipEnd) {
+                newClipPaths[index] = 'inset(0 0% 0 0%)' // Fully revealed
+              } else {
+                newClipPaths[index] = 'inset(0 100% 0 0)' // Fully hidden
+              }
+            }
+          }
+        })
+
+        setChipClipPaths(newClipPaths)
+      }
+    }
+
+    // Use requestAnimationFrame to ensure DOM has updated
+    const timeoutId = setTimeout(() => {
+      updateIndicatorPosition()
+    }, 0)
+
+    // Recalculate on window resize
+    window.addEventListener('resize', updateIndicatorPosition)
+    return () => {
+      clearTimeout(timeoutId)
+      window.removeEventListener('resize', updateIndicatorPosition)
+    }
+  }, [selectedIndex, categories])
+
   return (
-    <div className="filter-mobile" ref={filterRef} onKeyDown={handleKeyDown}>
-      {(isOpen || isClosing) && (
-        <div
-          className={`filter-menu ${gridColumnsClass} ${isClosing ? 'closing' : ''}`}
-          role="menu"
-          aria-label="Filter categories"
-        >
-          {categories.map((option) => (
+    <>
+      {/* Mobile Version */}
+      <div className="filter-mobile" ref={filterRef} onKeyDown={handleKeyDown}>
+        {(isOpen || isClosing) && (
+          <div
+            className={`filter-menu ${gridColumnsClass} ${isClosing ? 'closing' : ''}`}
+            role="menu"
+            aria-label="Filter categories"
+          >
+            {categories.map((option) => (
+              <button
+                key={option}
+                type="button"
+                role="menuitemradio"
+                aria-checked={effectiveSelectedCategory === option}
+                onClick={() => handleCategoryClick(option)}
+                className={`filter-item ${effectiveSelectedCategory === option ? 'active' : ''}`}
+              >
+                <span className="indicator" aria-hidden="true">
+                  {effectiveSelectedCategory === option ? (
+                    <img src="/images/svg/Selection-indicator.svg" alt="" />
+                  ) : null}
+                </span>
+                <span className="label">{option}</span>
+              </button>
+            ))}
+          </div>
+        )}
+        <div className="filter-padding">
+          <button
+            type="button"
+            className="filter-button"
+            onClick={handleToggleMenu}
+            aria-haspopup="menu"
+            aria-expanded={isOpen}
+          >
+            <p className="filter-button-text">{effectiveSelectedCategory}</p>
+            <div className="dropdown-icon">
+              <img src="/images/svg/dropdown-icon.svg" alt="dropdown" />
+            </div>
+          </button>
+        </div>
+      </div>
+
+      {/* Desktop Version */}
+      <div className="filter-desktop">
+        <div className="filter-slider" ref={sliderRef} role="group" aria-label="Filter categories">
+          <div 
+            className="filter-slider-indicator" 
+            style={{ 
+              left: `${indicatorStyle.left}px`,
+              width: `${indicatorStyle.width}px`
+            }}
+          />
+          {categories.map((option, index) => (
             <button
               key={option}
+              ref={(el) => {
+                chipRefs.current[index] = el
+              }}
               type="button"
-              role="menuitemradio"
-              aria-checked={effectiveSelectedCategory === option}
-              onClick={() => handleCategoryClick(option)}
-              className={`filter-item ${effectiveSelectedCategory === option ? 'active' : ''}`}
+              onClick={() => handleCategorySelect(option)}
+              className="filter-chip"
+              aria-pressed={effectiveSelectedCategory === option}
+              aria-label={option}
+              style={{
+                '--chip-clip': chipClipPaths[index] || 'inset(0 100% 0 0)'
+              } as React.CSSProperties}
             >
-              <span className="indicator" aria-hidden="true">
-                {effectiveSelectedCategory === option ? (
-                  <img src="/images/svg/Selection-indicator.svg" alt="" />
-                ) : null}
-              </span>
-              <span className="label">{option}</span>
+              {option}
             </button>
           ))}
         </div>
-      )}
-      <div className="filter-padding">
-        <button
-          type="button"
-          className="filter-button"
-          onClick={handleToggleMenu}
-          aria-haspopup="menu"
-          aria-expanded={isOpen}
-        >
-          <p className="filter-button-text">{effectiveSelectedCategory}</p>
-          <div className="dropdown-icon">
-            <img src="/images/svg/dropdown-icon.svg" alt="dropdown" />
-          </div>
-        </button>
       </div>
-    </div>
+    </>
   )
 }
 
