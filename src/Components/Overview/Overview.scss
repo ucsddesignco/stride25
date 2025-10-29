@@ -1,0 +1,79 @@
+#overview{
+    font-family: 'Bricolage Grotesque';
+    padding: 0px 96px;
+    margin: 80px 0px 0px;
+}
+
+.header{
+    h2{
+        font-weight: bold;
+        font-size: 24px;
+        color: #C4E5ED;
+
+        @media(min-width: 768px){
+            font-size: 32px;
+        }
+        
+        @media(min-width: 1440px){
+
+            }
+        }
+
+    p{
+        color: #C4E5ED;
+        margin: 1rem 0rem;
+    }
+    
+}
+
+.boxes-general {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+
+    @media (min-width: 768px){
+        grid-template-columns: repeat(2, 1fr);
+            
+        .box:nth-child(3) {
+            grid-column: 1 / -1;
+            width: 100%;
+        }
+    }
+
+    @media (min-width: 1440px){
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.75rem;
+                
+        .box:nth-child(3) {
+            grid-column: auto;
+            max-width: none;
+            margin: 0;
+            }
+        }
+}
+   
+.box {
+    background: #0B273E;
+    border-radius: 8px;
+    color: #B8E5ED;
+    position: relative;
+    min-height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-direction: column;
+
+
+    @media (min-width: 768px){
+        min-height: 200px;
+    }
+
+    @media (min-width: 1440px){
+        min-height: 220px;
+    }
+}
+
+
+
+
