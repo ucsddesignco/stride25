@@ -10,12 +10,17 @@ interface ShatterCanvasProps {
   params: Params;
   onParamsChange: (updates: Partial<Params>) => void;
   onShatter?: () => void;
+  // When this number changes, trigger a programmatic shatter
+  shatterSignal?: number;
+  // Optional normalized point [0..1] for shatter; defaults to center
+  shatterPoint?: Vec2;
 }
 
-export const ShatterCanvas: React.FC<ShatterCanvasProps> = ({ params, onParamsChange, onShatter }) => {
+export const ShatterCanvas: React.FC<ShatterCanvasProps> = ({ params, onParamsChange, onShatter, shatterSignal, shatterPoint }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const pointerRef = useRef<Vec2>({ x: 0.5, y: 0.5 });
   const globalIdCounterRef = useRef<number>(0);
+  const shatterSignalDidMountRef = useRef(false);
 
   const {
     glRef,
@@ -109,7 +114,8 @@ export const ShatterCanvas: React.FC<ShatterCanvasProps> = ({ params, onParamsCh
           id: newId,
           layerId: newLayerId,
           depth: currentGroups.length * params.layerSpacing,
-          brightness: 1.0,
+          brightness: 0.1,
+          fadeAge: 0,
           isActive: true,
           isShattered: false
         };
@@ -178,6 +184,22 @@ export const ShatterCanvas: React.FC<ShatterCanvasProps> = ({ params, onParamsCh
       resizeCanvas(canvas, params);
     }
   }, [resizeCanvas, params]);
+
+  // Programmatic shatter on signal change (e.g., filter category change)
+  useEffect(() => {
+    if (shatterSignal === undefined) return;
+    if (!shatterSignalDidMountRef.current) {
+      shatterSignalDidMountRef.current = true;
+      return;
+    }
+    const nx = shatterPoint?.x ?? 0.5;
+    const ny = shatterPoint?.y ?? 0.5;
+    const groups = getGroups();
+    if (!groups || groups.length === 0) return;
+    const targetLayer = explodeAt(nx, ny, groups, params, handleAddNewLayer, handleRemoveLayer);
+    onParamsChange({ currentActiveLayer: targetLayer });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shatterSignal]);
 
   useEffect(() => {
     const canvas = canvasRef.current;

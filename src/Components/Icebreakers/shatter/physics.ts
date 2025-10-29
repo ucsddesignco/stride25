@@ -49,14 +49,22 @@ export const stepPhysics = (
     g.ang += g.angVel * dt;
     g.age += dt;
     
-    // Brightness animation for new layers
-    if (g.layerId > 0 && g.brightness < 1.0) {
+    // Brightness animation with consistent duration using fadeAge
+    // Apply to any active, non-shattered layer that is currently dimmed
+    if (g.isActive && !g.isShattered && g.brightness < 1.0) {
+      g.fadeAge += dt;
       const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-      const maxAge = 2.5;
-      const normalizedAge = Math.min(g.age / maxAge, 1.0);
-      const targetBrightness = 0.1 + (0.9 * easeInOutCubic(normalizedAge));
+      const fadeDuration = 0.25; // 0.25s
+      const normalized = Math.min(g.fadeAge / fadeDuration, 1.0);
+      const targetBrightness = 0.1 + (0.9 * easeInOutCubic(normalized));
       const lerpSpeed = 2.5;
       g.brightness = g.brightness + (targetBrightness - g.brightness) * lerpSpeed * dt;
+      if (normalized >= 1.0) {
+        g.brightness = Math.min(1.0, g.brightness);
+      }
+    } else if (g.brightness >= 1.0) {
+      // Keep fadeAge reset once fully bright so next dim cycle restarts timing
+      g.fadeAge = 0;
     }
   }
 };
@@ -104,6 +112,7 @@ export const explodeAt = (
   for (const g of groups) {
     if (g.isActive && !g.isShattered && g.layerId !== targetLayer) {
       g.brightness = 0.1;
+      g.fadeAge = 0; // restart brightness easing for a consistent fade-up
     }
   }
   for (const g of groups) {

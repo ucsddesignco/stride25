@@ -134,7 +134,8 @@ export const buildMesh = (
         isShattered: false,
         originalPos: { x: cx, y: cy },
         age: 0,
-        brightness: initialBrightness
+        brightness: initialBrightness,
+        fadeAge: 0
       });
     }
 

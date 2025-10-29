@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, memo } from 'react'
+import { useState, useMemo, useCallback, useEffect, memo, useRef, useLayoutEffect } from 'react'
 import './IcebreakerSection.scss'
 import './Icebreaker.scss'
 import Button from '../Button/Button'
@@ -6,17 +6,60 @@ import PriceTag from '../../SVGS/PriceTag'
 import Filter from '../Filter/Filter'
 import { ShatterCanvas } from './shatter/ShatterCanvas'
 import type { Params } from './shatter/types'
+import { ICEBREAKER_CONTENT, type IcebreakerCategory } from './data'
 
 const MemoizedShatterCanvas = memo(ShatterCanvas)
 
 export default function IcebreakerSection() {
-  const [selectedCategory, setSelectedCategory] = useState('Introductions')
+  const [selectedCategory, setSelectedCategory] = useState<IcebreakerCategory>('Introductions')
   const [showText, setShowText] = useState(false)
   const [flashKey, setFlashKey] = useState(0)
+  const [currentText, setCurrentText] = useState<string>('')
+  const [disableTransition, setDisableTransition] = useState(false)
+  const [shatterSignal, setShatterSignal] = useState(0)
+  const didMountRef = useRef(false)
+  const [overlayReady, setOverlayReady] = useState(false)
+  const [overlayNoTransition, setOverlayNoTransition] = useState(true)
+
+  const formatWidont = useCallback((text: string) => {
+    if (!text) return ''
+    // Replace the last regular space with a non-breaking space to avoid a single-word last line
+    return text.replace(/\s+([^\s]+)\s*$/, '\u00A0$1')
+  }, [])
 
   const handleCategoryChange = useCallback((category: string) => {
-    setSelectedCategory(category)
+    setSelectedCategory(category as IcebreakerCategory)
   }, [])
+
+  const categories = useMemo(() => Object.keys(ICEBREAKER_CONTENT) as IcebreakerCategory[], [])
+
+  const categoryItems = useMemo(() => {
+    const items = ICEBREAKER_CONTENT[selectedCategory]
+    return items
+  }, [selectedCategory])
+
+  const getRandomItem = useCallback((items: string[]) => {
+    if (!items || items.length === 0) return ''
+    const index = Math.floor(Math.random() * items.length)
+    return items[index]
+  }, [])
+
+  useEffect(() => {
+    if (!didMountRef.current) {
+      didMountRef.current = true
+      return
+    }
+    // Reset to zero state instantly on category change
+    setDisableTransition(true)
+    setShowText(false)
+    setCurrentText('')
+    setFlashKey((k) => k + 1)
+    // trigger canvas shatter from center on category change
+    setShatterSignal((k) => k + 1)
+    // Re-enable transition after this render cycle
+    const t = setTimeout(() => setDisableTransition(false), 0)
+    return () => clearTimeout(t)
+  }, [selectedCategory])
 
   const params = useMemo<Params>(() => ({
     gravity: 0.0,
@@ -48,8 +91,29 @@ export default function IcebreakerSection() {
     // force reflow via key change to restart CSS animation if needed
     setFlashKey((k) => k + 1)
     // fade in shortly after to create appear effect
+    setCurrentText((prev) => {
+      // try to avoid immediate repeat if possible
+      let next = getRandomItem(categoryItems)
+      if (categoryItems.length > 1 && next === prev) {
+        next = getRandomItem(categoryItems)
+      }
+      return next
+    })
     setTimeout(() => setShowText(true), 10)
+  }, [categoryItems, getRandomItem])
+
+  // Ensure overlay text does not animate on initial paint
+  useLayoutEffect(() => {
+    // Mark ready for first render without transitions
+    setOverlayReady(true)
+    const id = requestAnimationFrame(() => setOverlayNoTransition(false))
+    return () => cancelAnimationFrame(id)
   }, [])
+
+  const displayText = useMemo(() => {
+    const baseText = currentText || 'Get prepared for Stride with tips and icebreakers.'
+    return formatWidont(baseText)
+  }, [currentText, formatWidont])
 
   return (
     <section id="icebreaker">
@@ -57,18 +121,25 @@ export default function IcebreakerSection() {
       <div className="canvas-wrapper">
         <div className="filter-overlay">
           <Filter
+            categories={categories}
             selectedCategory={selectedCategory}
             onCategoryChange={handleCategoryChange}
           />
         </div>
-        <MemoizedShatterCanvas params={params} onParamsChange={handleParamsChange} onShatter={handleShatter} />
+        <MemoizedShatterCanvas
+          params={params}
+          onParamsChange={handleParamsChange}
+          onShatter={handleShatter}
+          shatterSignal={didMountRef.current ? shatterSignal : undefined}
+        />
         <div
           key={flashKey}
-          className={`icebreaker-overlay-text ${showText ? 'visible' : ''}`}
+          className={`icebreaker-overlay-text ${showText ? 'visible' : ''} ${disableTransition ? 'no-transition' : ''}`}
           aria-live="polite"
           aria-atomic="true"
+          style={{ transition: overlayNoTransition ? 'none' as any : undefined, visibility: overlayReady ? 'visible' : 'hidden' }}
         >
-          Get prepared for Stride with tips and icebreakers.
+          {displayText}
         </div>
       </div>
 

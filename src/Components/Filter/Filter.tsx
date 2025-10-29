@@ -1,16 +1,26 @@
-import { useMemo, useState, useRef, useEffect } from 'react'
+import { useMemo, useState, useRef, useEffect, useLayoutEffect } from 'react'
 import './Filter.scss'
 
+type CategoryOption = string | { value: string; label: string; disabled?: boolean }
+
 interface FilterProps {
-  categories?: string[]
+  categories?: CategoryOption[]
   selectedCategory?: string
   onCategoryChange?: (category: string) => void
+  className?: string
+  ariaLabel?: string
+  getLabel?: (option: CategoryOption) => string
+  getValue?: (option: CategoryOption) => string
 }
 
 export default function Filter({
-  categories = ['Introductions', 'Icebreakers', 'Advice', 'Resume', 'Portfolio'],
+  categories = [],
   selectedCategory,
   onCategoryChange,
+  className,
+  ariaLabel,
+  getLabel: externalGetLabel,
+  getValue: externalGetValue,
 }: FilterProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [isClosing, setIsClosing] = useState(false)
@@ -19,6 +29,16 @@ export default function Filter({
   const sliderRef = useRef<HTMLDivElement>(null)
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 })
   const [chipClipPaths, setChipClipPaths] = useState<Record<number, string>>({})
+  const isInitialRenderRef = useRef(true)
+  const [indicatorReady, setIndicatorReady] = useState(false)
+  const [noTransition, setNoTransition] = useState(true)
+
+  const getValue = useMemo(() => externalGetValue || ((opt: CategoryOption) => (typeof opt === 'string' ? opt : opt.value)), [externalGetValue])
+  const getLabel = useMemo(() => externalGetLabel || ((opt: CategoryOption) => (typeof opt === 'string' ? opt : opt.label)), [externalGetLabel])
+  const isDisabled = (opt: CategoryOption) => (typeof opt === 'string' ? false : !!opt.disabled)
+
+  const normalizedValues = useMemo(() => categories.map((c) => getValue(c)), [categories, getValue])
+  const normalizedLabels = useMemo(() => categories.map((c) => getLabel(c)), [categories, getLabel])
 
   const handleCloseMenu = () => {
     setIsClosing(true)
@@ -51,9 +71,13 @@ export default function Filter({
   }
 
   const effectiveSelectedCategory = useMemo(() => {
-    if (selectedCategory && categories.includes(selectedCategory)) return selectedCategory
-    return categories[0]
-  }, [selectedCategory, categories])
+    if (!categories.length) return undefined
+    const providedIsValid = selectedCategory && normalizedValues.includes(selectedCategory)
+    if (providedIsValid) return selectedCategory
+    const firstEnabledIndex = categories.findIndex((c) => !isDisabled(c))
+    if (firstEnabledIndex >= 0) return normalizedValues[firstEnabledIndex]
+    return normalizedValues[0]
+  }, [selectedCategory, categories, normalizedValues])
 
   const gridColumnsClass = useMemo(() => {
     const count = categories.length
@@ -101,13 +125,48 @@ export default function Filter({
   }
 
   const selectedIndex = useMemo(() => {
-    return categories.indexOf(effectiveSelectedCategory)
-  }, [effectiveSelectedCategory, categories])
+    return effectiveSelectedCategory ? normalizedValues.indexOf(effectiveSelectedCategory) : -1
+  }, [effectiveSelectedCategory, normalizedValues])
 
   // Update indicator position and calculate clip paths for chips
+  // For the very first render, measure synchronously to avoid visible animation
+  useLayoutEffect(() => {
+    const selectedChip = selectedIndex >= 0 ? chipRefs.current[selectedIndex] : undefined
+    if (selectedChip && sliderRef.current && isInitialRenderRef.current) {
+      const slider = sliderRef.current
+      const chipRect = selectedChip.getBoundingClientRect()
+      const sliderRect = slider.getBoundingClientRect()
+      const left = chipRect.left - sliderRect.left
+      const width = chipRect.width
+      setIndicatorStyle({ left, width })
+      isInitialRenderRef.current = false
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // After measuring and fonts are ready, reveal indicator and then enable transitions
+  useEffect(() => {
+    let mounted = true
+    const reveal = () => {
+      if (!mounted) return
+      setIndicatorReady(true)
+      requestAnimationFrame(() => {
+        if (!mounted) return
+        setNoTransition(false)
+      })
+    }
+    if ((document as any).fonts && (document as any).fonts.ready) {
+      ;(document as any).fonts.ready.then(() => reveal())
+    } else {
+      reveal()
+    }
+    return () => { mounted = false }
+  }, [])
+
+  // Subsequent updates and responsive recalculation
   useEffect(() => {
     const updateIndicatorPosition = () => {
-      const selectedChip = chipRefs.current[selectedIndex]
+      const selectedChip = selectedIndex >= 0 ? chipRefs.current[selectedIndex] : undefined
       if (selectedChip && sliderRef.current) {
         const slider = sliderRef.current
         const chipRect = selectedChip.getBoundingClientRect()
@@ -165,31 +224,40 @@ export default function Filter({
     }
   }, [selectedIndex, categories])
 
+  const mobileButtonLabel = useMemo(() => {
+    if (!categories.length) return 'Select'
+    if (!effectiveSelectedCategory) return 'Select'
+    const idx = normalizedValues.indexOf(effectiveSelectedCategory)
+    return idx >= 0 ? normalizedLabels[idx] : 'Select'
+  }, [categories.length, effectiveSelectedCategory, normalizedLabels, normalizedValues])
+
   return (
     <>
       {/* Mobile Version */}
-      <div className="filter-mobile" ref={filterRef} onKeyDown={handleKeyDown}>
+      <div className={`filter-mobile${className ? ` ${className}` : ''}`} ref={filterRef} onKeyDown={handleKeyDown}>
         {(isOpen || isClosing) && (
           <div
             className={`filter-menu ${gridColumnsClass} ${isClosing ? 'closing' : ''}`}
             role="menu"
-            aria-label="Filter categories"
+            aria-label={ariaLabel || 'Filter categories'}
           >
-            {categories.map((option) => (
+            {categories.map((option, i) => (
               <button
-                key={option}
+                key={normalizedValues[i]}
                 type="button"
                 role="menuitemradio"
-                aria-checked={effectiveSelectedCategory === option}
-                onClick={() => handleCategoryClick(option)}
-                className={`filter-item ${effectiveSelectedCategory === option ? 'active' : ''}`}
+                aria-checked={effectiveSelectedCategory === normalizedValues[i]}
+                aria-disabled={isDisabled(option) || undefined}
+                disabled={isDisabled(option)}
+                onClick={() => !isDisabled(option) && handleCategoryClick(normalizedValues[i])}
+                className={`filter-item ${effectiveSelectedCategory === normalizedValues[i] ? 'active' : ''}`}
               >
                 <span className="indicator" aria-hidden="true">
-                  {effectiveSelectedCategory === option ? (
+                  {effectiveSelectedCategory === normalizedValues[i] ? (
                     <img src="/images/svg/Selection-indicator.svg" alt="" />
                   ) : null}
                 </span>
-                <span className="label">{option}</span>
+                <span className="label">{normalizedLabels[i]}</span>
               </button>
             ))}
           </div>
@@ -202,7 +270,7 @@ export default function Filter({
             aria-haspopup="menu"
             aria-expanded={isOpen}
           >
-            <p className="filter-button-text">{effectiveSelectedCategory}</p>
+            <p className="filter-button-text">{mobileButtonLabel}</p>
             <div className="dropdown-icon">
               <img src="/images/svg/dropdown-icon.svg" alt="dropdown" />
             </div>
@@ -211,31 +279,35 @@ export default function Filter({
       </div>
 
       {/* Desktop Version */}
-      <div className="filter-desktop">
-        <div className="filter-slider" ref={sliderRef} role="group" aria-label="Filter categories">
+      <div className={`filter-desktop${className ? ` ${className}` : ''}`}>
+        <div className="filter-slider" ref={sliderRef} role="group" aria-label={ariaLabel || 'Filter categories'} data-initializing={!indicatorReady}>
           <div 
             className="filter-slider-indicator" 
             style={{ 
               left: `${indicatorStyle.left}px`,
-              width: `${indicatorStyle.width}px`
+              width: `${indicatorStyle.width}px`,
+              transition: noTransition ? 'none' as any : undefined,
+              visibility: indicatorReady ? 'visible' : 'hidden'
             }}
           />
           {categories.map((option, index) => (
             <button
-              key={option}
+              key={normalizedValues[index]}
               ref={(el) => {
                 chipRefs.current[index] = el
               }}
               type="button"
-              onClick={() => handleCategorySelect(option)}
+              onClick={() => !isDisabled(option) && handleCategorySelect(normalizedValues[index])}
               className="filter-chip"
-              aria-pressed={effectiveSelectedCategory === option}
-              aria-label={option}
+              aria-pressed={effectiveSelectedCategory === normalizedValues[index]}
+              aria-label={normalizedLabels[index]}
+              aria-disabled={isDisabled(option) || undefined}
+              disabled={isDisabled(option)}
               style={{
                 '--chip-clip': chipClipPaths[index] || 'inset(0 100% 0 0)'
               } as React.CSSProperties}
             >
-              {option}
+              {normalizedLabels[index]}
             </button>
           ))}
         </div>
