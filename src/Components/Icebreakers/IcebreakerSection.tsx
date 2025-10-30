@@ -8,18 +8,27 @@ import { ShatterCanvas } from './shatter/ShatterCanvas'
 import type { Params } from './shatter/types'
 import { ICEBREAKER_CONTENT, type IcebreakerCategory } from './data'
 
-const MemoizedShatterCanvas = memo(ShatterCanvas)
+const MemoizedShatterCanvas = memo(ShatterCanvas, (prevProps, nextProps) => {
+  // Prevent re-renders unless params actually change (shallow comparison)
+  return (
+    prevProps.params === nextProps.params &&
+    prevProps.onParamsChange === nextProps.onParamsChange &&
+    prevProps.onShatter === nextProps.onShatter &&
+    prevProps.shatterSignal === nextProps.shatterSignal
+  )
+})
 
 export default function IcebreakerSection() {
   const [selectedCategory, setSelectedCategory] = useState<IcebreakerCategory>('Introductions')
   const [showText, setShowText] = useState(false)
   const [flashKey, setFlashKey] = useState(0)
   const [currentText, setCurrentText] = useState<string>('')
-  const [disableTransition, setDisableTransition] = useState(false)
-  const [shatterSignal, setShatterSignal] = useState(0)
+  const [disableTransition] = useState(false)
+  
   const didMountRef = useRef(false)
   const [overlayReady, setOverlayReady] = useState(false)
   const [overlayNoTransition, setOverlayNoTransition] = useState(true)
+  const categoryItemsRef = useRef<string[]>([])
 
   const formatWidont = useCallback((text: string) => {
     if (!text) return ''
@@ -33,9 +42,8 @@ export default function IcebreakerSection() {
 
   const categories = useMemo(() => Object.keys(ICEBREAKER_CONTENT) as IcebreakerCategory[], [])
 
-  const categoryItems = useMemo(() => {
-    const items = ICEBREAKER_CONTENT[selectedCategory]
-    return items
+  useEffect(() => {
+    categoryItemsRef.current = ICEBREAKER_CONTENT[selectedCategory]
   }, [selectedCategory])
 
   const getRandomItem = useCallback((items: string[]) => {
@@ -49,16 +57,12 @@ export default function IcebreakerSection() {
       didMountRef.current = true
       return
     }
-    // Reset to zero state instantly on category change
-    setDisableTransition(true)
+    // Fade out overlay text on category change, then clear after transition
     setShowText(false)
-    setCurrentText('')
-    setFlashKey((k) => k + 1)
-    // trigger canvas shatter from center on category change
-    setShatterSignal((k) => k + 1)
-    // Re-enable transition after this render cycle
-    const t = setTimeout(() => setDisableTransition(false), 0)
-    return () => clearTimeout(t)
+    const clearId = setTimeout(() => {
+      setCurrentText('')
+    }, 400) // match CSS transition duration in IcebreakerSection.scss
+    return () => clearTimeout(clearId)
   }, [selectedCategory])
 
   const params = useMemo<Params>(() => ({
@@ -92,15 +96,16 @@ export default function IcebreakerSection() {
     setFlashKey((k) => k + 1)
     // fade in shortly after to create appear effect
     setCurrentText((prev) => {
+      const items = categoryItemsRef.current
       // try to avoid immediate repeat if possible
-      let next = getRandomItem(categoryItems)
-      if (categoryItems.length > 1 && next === prev) {
-        next = getRandomItem(categoryItems)
+      let next = getRandomItem(items)
+      if (items.length > 1 && next === prev) {
+        next = getRandomItem(items)
       }
       return next
     })
     setTimeout(() => setShowText(true), 10)
-  }, [categoryItems, getRandomItem])
+  }, [getRandomItem])
 
   // Ensure overlay text does not animate on initial paint
   useLayoutEffect(() => {
@@ -130,7 +135,6 @@ export default function IcebreakerSection() {
           params={params}
           onParamsChange={handleParamsChange}
           onShatter={handleShatter}
-          shatterSignal={didMountRef.current ? shatterSignal : undefined}
         />
         <div
           key={flashKey}
