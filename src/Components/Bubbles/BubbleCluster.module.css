@@ -1,0 +1,151 @@
+.bubbleClusterContainer {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  background-color: #29597b;
+  border-radius: 8px;
+  font-family: "Reddit Sans";
+}
+
+.backgroundPattern {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom right,
+    transparent,
+    rgba(0, 0, 0, 0.05),
+    rgba(0, 0, 0, 0.1)
+  );
+}
+
+.resetButton {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 20;
+  padding: 0.5rem 1rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.resetButton:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.resetButton:active {
+  transform: scale(0.98);
+}
+
+.instructions {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 20;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 20rem;
+}
+
+.instructions p {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.circlesContainer {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.bubble {
+  position: absolute;
+  user-select: none;
+  transition: transform 0.2s ease-out;
+}
+
+.bubble.interactable {
+  cursor: pointer;
+}
+
+.bubble.nonInteractable {
+  cursor: default;
+}
+
+.glowEffect {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  opacity: 0.2;
+  filter: blur(12px);
+  transform: scale(1.1);
+}
+
+.bubbleContent {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 9999px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+.svgContainer {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.expandedBubble {
+  width: 100%;
+  height: 100%;
+  background-color: #dcf7ff;
+  border-radius: 9999px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+
+}
+
+.logoContainer {
+  margin-bottom: -0.75rem;
+}
+
+.logoSvg {
+  display: block;
+  width: 9rem;
+  height: 9rem;
+}
+
+@media (min-width: 768px) {
+  .logoSvg {
+    width: 13.5rem;
+    height: 13.5rem;
+  }
+}
+
+.textContent {
+  max-width: 17.5rem;
+  color: #1b365d;
+  font-family: "Reddit Sans";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 110%;
+  margin: 0;
+}
+
+.bubble-button {
+    background-color: red;
+    height: 20px;
+    width: 20px;
+}
