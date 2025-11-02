@@ -46,8 +46,7 @@ export function BubbleCluster({
       {/* Container for circles */}
       <div ref={containerRef} className={styles.circlesContainer}>
         {circles.map((circle) => {
-          const description = circle.bubbleType === 'main' ? circle.description : '';
-          // Calculate transform scale based on hover/press state
+          const description = circle.bubbleType === 'main' ? circle.description ?? '' : '';
           const scale = circle.isInteractable
             ? circle.isPressed
               ? 0.95

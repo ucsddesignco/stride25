@@ -14,6 +14,7 @@ export interface Circle {
   accentColor?: string;
   isHovered: boolean;
   isPressed: boolean;
+  description?: string;
 }
 
 export interface BubbleClusterProps {
