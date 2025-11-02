@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { BubbleClusterProps, Circle } from './types';
+import { CompanyData } from './CompanyData';
 
 export function useBubbleCluster(_props?: BubbleClusterProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -23,8 +24,8 @@ export function useBubbleCluster(_props?: BubbleClusterProps) {
     if (containerSize.width === 0 || containerSize.height === 0) return;
     const margin = 20;
 
-    const mainBubbles: Circle[] = Array.from({ length: 8 }, (_, i) => ({
-      id: i,
+    const mainBubbles: Circle[] = CompanyData.map((company) => ({
+      id: company.id,
       x: Math.random() * (containerSize.width - 150 - margin * 2) + 75 + margin,
       y: Math.random() * (containerSize.height - 150 - margin * 2) + 75 + margin,
       vx: (Math.random() - 0.5) * 0.5,
@@ -36,6 +37,7 @@ export function useBubbleCluster(_props?: BubbleClusterProps) {
       bubbleType: 'main',
       isHovered: false,
       isPressed: false,
+      description: company.description,
     }));
 
     const accentSizes = [30, 35, 50, 40, 25, 45, 28, 42, 32, 38, 27, 48];

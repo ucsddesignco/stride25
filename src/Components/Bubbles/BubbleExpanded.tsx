@@ -1,7 +1,7 @@
 import styles from './BubbleCluster.module.css';
 import { AoPSLogoPaths } from './AoPSLogoPaths';
 
-export function BubbleExpanded() {
+export function BubbleExpanded({ description }: { description: string }) {
   return (
     <div className={styles.expandedBubble}>
       <div className={styles.logoContainer}>
@@ -15,9 +15,7 @@ export function BubbleExpanded() {
         </svg>
       </div>
       <div className={styles.textContent}>
-        The Art of Problem Solving is a company dedicated to enhancing the
-        mathematical skills of students through innovative resources and
-        engaging courses.
+        {description}
       </div>
     </div>
   );
