@@ -1,0 +1,133 @@
+.wave{
+    margin-top: 12rem;
+    width: 100%;                     /* takes full width of parent/screen */
+    // max-width: 1400px;               
+    min-width: 631px;               
+    aspect-ratio: 1281 / 300;       /* keeps height proportional */
+    background: linear-gradient(179deg, #235E83 1.77%, #173F5B 70.56%);
+    position: relative;              /* needed for absolute children */
+    // overflow: hidden;
+    // border: 2px solid purple;
+
+    #bigBoulder{
+        // border: 2px solid red;
+        position: absolute;
+        width: 50%;
+        // left: 0;
+        right: -12%;
+        bottom: -5%;
+        animation: floatWave 3s ease-in-out infinite;   
+
+        @media (max-width: 1241px){
+            width: 40%;
+            bottom: -30%;
+
+        }
+
+        @media (max-width: 999px){
+            bottom: -60%;
+            
+
+        }
+
+        @media (max-width: 892px){
+            width: 50%;
+        }
+
+        @media (max-width: 766px){
+            bottom: -90%;
+
+        }
+
+        @media (max-width: 393px){
+            bottom: -130%;
+            right: 10%;
+
+        }
+
+    }
+
+    #bigBoulderFilterTablet{
+        display: none;
+    }
+    
+    #bigBoulderFilter{
+        width: 60%;
+        position: absolute;
+        // left: 0;
+        right: -10%;
+        bottom: -32%;
+        // border: 2px solid red;
+        // border: 2px solid rebeccapurple;
+
+        @media (max-width: 393px){
+            top: -50%;
+            left: 23%;
+        }
+    }
+
+    #smallBoulder{
+        position: absolute;
+        width: 50%;
+        // left: 0;
+        left: -6%;
+        bottom: 35%;
+        animation: floatWave 5s ease-in-out infinite;   
+        @media(max-width: 393px){
+            display: none; 
+        }
+    }
+    
+    #smallBoulderFilter{
+        width: 60%;
+        position: absolute;
+        // border: 2px solid purple;
+        bottom: -55%;
+
+        @media (max-width: 393px){
+
+            display: none;
+
+        }
+    }
+    
+    #whiteWaves{
+        position: absolute;
+        top: 17%;
+    }
+    
+    @keyframes floatWave {
+        0%, 100% {
+        transform: translateY(0);
+        }
+        50% {
+        transform: translateY(20px); // moves up/down 10px
+        }
+    }
+    
+    @keyframes floatWave2 {
+        0%, 100% {
+        transform:  rotate(0);
+        }
+        50% {
+        transform: rotate(5deg);
+        }
+    }
+    .bottom-wave{
+        border: 2px springgreen dashed;
+        position: absolute;
+        bottom: 0;
+        // margin-top: 15rem;
+        width: 100%;                     /* takes full width of parent/screen */
+        // max-width: 1400px;               /* caps at desktop width */
+        min-width: 631px;                /* never smaller than phone width */
+        aspect-ratio: 1281 /1000;       /* keeps height proportional */
+        // border: 2px solid red;
+        overflow: hidden;
+
+
+    }  
+
+    
+
+}
