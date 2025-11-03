@@ -67,8 +67,8 @@ export default function IcebreakerSection() {
 
   const params = useMemo<Params>(() => ({
     gravity: 0.0,
-    damping: 0.998,
-    impulse: 6.0,
+    damping: 0.9995, // Increased from 0.998 - slower velocity decay for smoother motion
+    impulse: 4.0, // Reduced from 6.0 - less initial force for slower start
     impulseRadius: 1.2,
     wireframe: false,
     layerCount: 3,
@@ -76,8 +76,8 @@ export default function IcebreakerSection() {
     layerSpacing: 0.1,
     enableBlending: true,
     currentActiveLayer: 0,
-    acceleration: 0.8,
-    accelerationDelay: 0.3,
+    acceleration: 0.4, // Reduced from 0.8 - less speed increase over time
+    accelerationDelay: 0.6, // Increased from 0.3 - more delay before acceleration starts
     iceTopColor: [0.95, 0.98, 1.0],
     iceMiddleColor: [0.7, 0.85, 0.95],
     iceBottomColor: [0.3, 0.6, 0.8],
