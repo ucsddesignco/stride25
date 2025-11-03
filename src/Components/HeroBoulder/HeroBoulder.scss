@@ -10,7 +10,7 @@
     #bigBoulder{
         position: absolute;
         width: 50%;
-        height: fit-content;
+        height: auto;
         right: -12%;
         bottom: -20%;
         animation: floatWave 3s ease-in-out infinite;   
@@ -19,22 +19,62 @@
             right: 2%
         }
     }
-    #bigBoulderFilter{
+    .boulder-filter-wrapper {
         width: 60%;
         position: absolute;
-        // left: 0;
         right: -10%;
         bottom: -57%;
-        height: fit-content;
+        height: auto;
+        transform: translate3d(0, 0, 0); // Force hardware acceleration with 3D transform
+        -webkit-transform: translate3d(0, 0, 0);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        perspective: 1000;
+        -webkit-perspective: 1000;
         @media (max-width: 575px){
             right: 2%;
             bottom: -57%;
         }
+        
+        &:nth-of-type(2) {
+            width: 60%;
+            right: auto;
+            bottom: -69%;
+            left: -6%;
+            // Different mask for small boulder filter
+            mask-image: radial-gradient(ellipse 85% 100% at center, black 35%, transparent 100%);
+            -webkit-mask-image: radial-gradient(ellipse 85% 100% at center, black 35%, transparent 100%);
+        }
+        
+        svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        // Apply blend mode to wrapper instead of SVG for better Safari support
+        &.boulder-filter-overlay {
+            mix-blend-mode: overlay;
+            // Fade edges to make seamless blend with background
+            mask-image: radial-gradient(ellipse 80% 100% at center, black 40%, transparent 100%);
+            -webkit-mask-image: radial-gradient(ellipse 80% 100% at center, black 40%, transparent 100%);
+            mask-composite: intersect;
+            -webkit-mask-composite: source-in;
+            opacity: 0.85; // Slight overall transparency for better blending
+        }
+    }
+    
+    #bigBoulderFilter{
+        width: 100%;
+        height: 100%;
+        display: block;
     }
     #smallBoulder{
         position: absolute;
         width: 50%;
-        height: fit-content;       
+        height: auto;       
         left: -6%;
         bottom: 10%;
         animation: floatWave 5s ease-in-out infinite;   
@@ -44,10 +84,10 @@
     }
     
     #smallBoulderFilter{
-        width: 60%;
-        position: absolute;
-        height: fit-content;
-        bottom: -69%;
+        width: 100%;
+        height: 100%;
+        display: block;
+        
         @media (max-width: 575px){
             display: none;
         }
@@ -56,7 +96,7 @@
     #whiteWaves{
         position: absolute;
         top: 24%;
-        height: fit-content;
+        height: auto;
     }
     
     @keyframes floatWave {

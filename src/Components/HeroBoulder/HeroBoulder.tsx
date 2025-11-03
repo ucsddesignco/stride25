@@ -8,11 +8,15 @@ import WhiteWaves from '../../SVGS/WhiteWaves'
 export default function HeroBoulder() {
   return (
     <div id='wave'>
-      <BigBoulder/>
-      <BigBoulderFilterDesktop/>
-      <SmallBoulder/>
-       <SmallBoulderFilter/> 
-      <WhiteWaves/> 
+      <BigBoulder />
+      <div className="boulder-filter-wrapper boulder-filter-overlay">
+        <BigBoulderFilterDesktop />
       </div>
+      <SmallBoulder />
+      <div className="boulder-filter-wrapper boulder-filter-overlay">
+        <SmallBoulderFilter />
+      </div>
+      <WhiteWaves />
+    </div>
   )
 }
