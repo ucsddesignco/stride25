@@ -1,5 +1,5 @@
 .price-button {
-    background-color: #D3F4FA;
+    background-color: #CCEDF4;
     color: #011524;
     font-weight: 500;
     display: flex;
@@ -17,8 +17,8 @@
     }
   
     &:is(:hover, :focus-visible) {
-      color: #353c51;
-      background-color: #fffffe;
+      color: #04131D;
+      background-color: #ffffff;
     }
   }
   

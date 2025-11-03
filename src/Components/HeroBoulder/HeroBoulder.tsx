@@ -1,23 +1,18 @@
 import './HeroBoulder.scss'
 import BigBoulder from '../../SVGS/BigBoulder'
-import BigBoulderFilterDesktop from '../../SVGS/BigBoulderFilterDesktop'
+import BigBoulderFilterDesktop from '../../SVGS/BigBoulderFilter'
 import SmallBoulder from '../../SVGS/SmallBoulder'
 import SmallBoulderFilter from '../../SVGS/SmallBoulderFilter'
-import BigBoulderFilterTablet from '../../SVGS/BigBoulderFilterTablet'
 import WhiteWaves from '../../SVGS/WhiteWaves'
 
 export default function HeroBoulder() {
   return (
-    <div className='wave'>
-      {/* <div className="bottom-wave"> */}
+    <div id='wave'>
       <BigBoulder/>
-      {/* <BigBoulderFilterDesktop/>
-      <BigBoulderFilterTablet/> */}
-      {/* </div> */}
-
+      <BigBoulderFilterDesktop/>
       <SmallBoulder/>
-      {/* <SmallBoulderFilter/> 
-      <WhiteWaves/> */}
+       <SmallBoulderFilter/> 
+      <WhiteWaves/> 
       </div>
   )
 }

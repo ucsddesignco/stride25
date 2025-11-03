@@ -2,6 +2,7 @@ import './Navbar.scss'
 import { useEffect, useState } from 'react'
 import { Pivot as Hamburger } from 'hamburger-react'
 import Button from '../Button/Button'
+import PriceTag from '../../SVGS/PriceTag'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -38,12 +39,18 @@ export default function Navbar() {
 
       {/* Mobile Dropdown */}
       <div className={`mobile-menu ${isOpen ? 'open' : ''}`}>
-        <ul>
-          <li>Overview</li>
-          <li>Companies</li>
-          <li>Prepare</li>
-          <Button text='Register' className='priceNav' />
-        </ul>
+        <div className="mobile-menu-header">
+          <span className='strideSpan'>Stride</span>
+          <Hamburger toggled={isOpen} toggle={setIsOpen} color="#D3F4FA" />
+        </div>
+        <div className="mobile-menu-content">
+          <ul>
+            <li>Overview</li>
+            <li>Companies</li>
+            <li>Prepare</li>
+          </ul>
+          <Button text='Register now for $6' icon={PriceTag()} className='priceHero'/>
+          </div>
       </div>
     </nav>
   );

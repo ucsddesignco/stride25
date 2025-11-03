@@ -1,79 +1,44 @@
-.wave{
+#wave{
     margin-top: 12rem;
-    width: 100%;                     /* takes full width of parent/screen */
-    // max-width: 1400px;               
+    width: 100%;                     
     min-width: 631px;               
-    aspect-ratio: 1281 / 300;       /* keeps height proportional */
+    aspect-ratio: 1281 / 300;       
     background: linear-gradient(179deg, #235E83 1.77%, #173F5B 70.56%);
-    position: relative;              /* needed for absolute children */
-    // overflow: hidden;
-    // border: 2px solid purple;
+    position: relative;              
+ 
 
     #bigBoulder{
-        // border: 2px solid red;
         position: absolute;
         width: 50%;
-        // left: 0;
+        height: fit-content;
         right: -12%;
-        bottom: -5%;
+        bottom: -20%;
         animation: floatWave 3s ease-in-out infinite;   
-
-        @media (max-width: 1241px){
-            width: 40%;
-            bottom: -30%;
-
+        @media (max-width: 575px){
+            width: 60%;
+            right: 2%
         }
-
-        @media (max-width: 999px){
-            bottom: -60%;
-            
-
-        }
-
-        @media (max-width: 892px){
-            width: 50%;
-        }
-
-        @media (max-width: 766px){
-            bottom: -90%;
-
-        }
-
-        @media (max-width: 393px){
-            bottom: -130%;
-            right: 10%;
-
-        }
-
     }
-
-    #bigBoulderFilterTablet{
-        display: none;
-    }
-    
     #bigBoulderFilter{
         width: 60%;
         position: absolute;
         // left: 0;
         right: -10%;
-        bottom: -32%;
-        // border: 2px solid red;
-        // border: 2px solid rebeccapurple;
-
-        @media (max-width: 393px){
-            top: -50%;
-            left: 23%;
+        bottom: -57%;
+        height: fit-content;
+        @media (max-width: 575px){
+            right: 2%;
+            bottom: -57%;
         }
     }
-
     #smallBoulder{
         position: absolute;
         width: 50%;
-        // left: 0;
+        height: fit-content;       
         left: -6%;
-        bottom: 35%;
+        bottom: 10%;
         animation: floatWave 5s ease-in-out infinite;   
-        @media(max-width: 393px){
+        @media(max-width: 575px){
             display: none; 
         }
     }
@@ -81,19 +46,17 @@
     #smallBoulderFilter{
         width: 60%;
         position: absolute;
-        // border: 2px solid purple;
-        bottom: -55%;
-
-        @media (max-width: 393px){
-
+        height: fit-content;
+        bottom: -69%;
+        @media (max-width: 575px){
             display: none;
-
         }
     }
     
     #whiteWaves{
         position: absolute;
-        top: 17%;
+        top: 24%;
+        height: fit-content;
     }
     
     @keyframes floatWave {
@@ -113,21 +76,4 @@
         transform: rotate(5deg);
         }
     }
-    .bottom-wave{
-        border: 2px springgreen dashed;
-        position: absolute;
-        bottom: 0;
-        // margin-top: 15rem;
-        width: 100%;                     /* takes full width of parent/screen */
-        // max-width: 1400px;               /* caps at desktop width */
-        min-width: 631px;                /* never smaller than phone width */
-        aspect-ratio: 1281 /1000;       /* keeps height proportional */
-        // border: 2px solid red;
-        overflow: hidden;
-
-
-    }  
-
-    
-
 }
