@@ -24,11 +24,13 @@ export default function IcebreakerSection() {
   const [flashKey, setFlashKey] = useState(0)
   const [currentText, setCurrentText] = useState<string>('')
   const [disableTransition] = useState(false)
-  
+  const [isMouseDown, setIsMouseDown] = useState(false)
+
   const didMountRef = useRef(false)
   const [overlayReady, setOverlayReady] = useState(false)
   const [overlayNoTransition, setOverlayNoTransition] = useState(true)
   const categoryItemsRef = useRef<string[]>([])
+  const canvasWrapperRef = useRef<HTMLDivElement>(null)
 
   const formatWidont = useCallback((text: string) => {
     if (!text) return ''
@@ -87,7 +89,7 @@ export default function IcebreakerSection() {
     highlightIntensity: 0.0,
   }), [])
 
-  const handleParamsChange = useCallback(() => {}, [])
+  const handleParamsChange = useCallback(() => { }, [])
 
   const handleShatter = useCallback(() => {
     // subsequent shatters: hide instantly then fade back in
@@ -120,10 +122,41 @@ export default function IcebreakerSection() {
     return formatWidont(baseText)
   }, [currentText, formatWidont])
 
+  const handleMouseDown = useCallback(() => {
+    setIsMouseDown(true)
+  }, [])
+
+  const handleMouseUp = useCallback(() => {
+    setIsMouseDown(false)
+  }, [])
+
+  const handleMouseLeave = useCallback(() => {
+    setIsMouseDown(false)
+  }, [])
+
+  useEffect(() => {
+    const wrapper = canvasWrapperRef.current
+    if (!wrapper) return
+
+    wrapper.addEventListener('mousedown', handleMouseDown)
+    wrapper.addEventListener('mouseleave', handleMouseLeave)
+    document.addEventListener('mouseup', handleMouseUp)
+
+    return () => {
+      wrapper.removeEventListener('mousedown', handleMouseDown)
+      wrapper.removeEventListener('mouseleave', handleMouseLeave)
+      document.removeEventListener('mouseup', handleMouseUp)
+    }
+  }, [handleMouseDown, handleMouseUp, handleMouseLeave])
+
   return (
     <section id="icebreaker">
       <h2>Get prepared for Stride with tips and icebreakers.</h2>
-      <div className="canvas-wrapper">
+
+      <div
+        ref={canvasWrapperRef}
+        className={`canvas-wrapper ${isMouseDown ? 'clicking' : ''}`}
+      >
         <div className="filter-overlay">
           <Filter
             categories={categories}
@@ -148,7 +181,7 @@ export default function IcebreakerSection() {
       </div>
 
       <h1>Register for Stride!</h1>
-      <Button text='Register now for $6' icon={PriceTag()} className='priceHero'/>
+      <Button text='Register now for $6' icon={PriceTag()} className='priceHero' />
     </section>
   )
 }
