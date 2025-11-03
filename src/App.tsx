@@ -8,7 +8,7 @@ import IcebreakerSection from "./Components/Icebreakers/IcebreakerSection";
 import Accordion from "./Components/Accordion/Accordion";
 import Fields from "./Components/Fields/Fields";
 import Schedule from "./Components/Schedule/Schedule";
-// import Bubbles from "./Components/Bubbles/Bubbles"
+import Bubbles from "./Components/Bubbles/Bubbles"
 
 function App() {
   return (
@@ -19,6 +19,7 @@ function App() {
       <Schedule />
       <Fields />
       <Accordion />
+      <Bubbles />
       <IcebreakerSection />
       <Footer />
     </>
