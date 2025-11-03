@@ -1,0 +1,44 @@
+#icebreaker {
+
+  .canvas-wrapper {
+    position: relative;
+
+    .icebreaker-overlay-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 5;
+      color: #07121C;
+      text-align: center;
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: 24px;
+      line-height: 1.4;
+      opacity: 0;
+      transition: opacity 400ms ease;
+      pointer-events: none;
+    }
+
+    .icebreaker-overlay-text.visible {
+      opacity: 1;
+    }
+
+    .icebreaker-overlay-text.no-transition {
+      transition: none;
+    }
+
+    .filter-overlay {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      pointer-events: none;
+
+      > * {
+        pointer-events: all;
+      }
+    }
+  }
+}
+
