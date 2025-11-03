@@ -1,0 +1,79 @@
+#wave{
+    margin-top: 12rem;
+    width: 100%;                     
+    min-width: 631px;               
+    aspect-ratio: 1281 / 300;       
+    background: linear-gradient(179deg, #235E83 1.77%, #173F5B 70.56%);
+    position: relative;              
+ 
+
+    #bigBoulder{
+        position: absolute;
+        width: 50%;
+        height: fit-content;
+        right: -12%;
+        bottom: -20%;
+        animation: floatWave 3s ease-in-out infinite;   
+        @media (max-width: 575px){
+            width: 60%;
+            right: 2%
+        }
+    }
+    #bigBoulderFilter{
+        width: 60%;
+        position: absolute;
+        // left: 0;
+        right: -10%;
+        bottom: -57%;
+        height: fit-content;
+        @media (max-width: 575px){
+            right: 2%;
+            bottom: -57%;
+        }
+    }
+    #smallBoulder{
+        position: absolute;
+        width: 50%;
+        height: fit-content;       
+        left: -6%;
+        bottom: 10%;
+        animation: floatWave 5s ease-in-out infinite;   
+        @media(max-width: 575px){
+            display: none; 
+        }
+    }
+    
+    #smallBoulderFilter{
+        width: 60%;
+        position: absolute;
+        height: fit-content;
+        bottom: -69%;
+        @media (max-width: 575px){
+            display: none;
+        }
+    }
+    
+    #whiteWaves{
+        position: absolute;
+        top: 24%;
+        height: fit-content;
+    }
+    
+    @keyframes floatWave {
+        0%, 100% {
+        transform: translateY(0);
+        }
+        50% {
+        transform: translateY(20px); // moves up/down 10px
+        }
+    }
+    
+    @keyframes floatWave2 {
+        0%, 100% {
+        transform:  rotate(0);
+        }
+        50% {
+        transform: rotate(5deg);
+        }
+    }
+}
