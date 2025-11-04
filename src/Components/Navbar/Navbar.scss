@@ -2,7 +2,7 @@ nav {
     font-family: "Bricolage Grotesque";
     padding: 20px 32px;
     background-color: transparent;
-    position: absolute;
+    position: fixed;
     width: 100%;
     color: #D3F4FA;
     z-index: 1;
@@ -29,12 +29,41 @@ nav {
         cursor: pointer;
         align-items: center;
         
-        li:hover {
-          color: #ffffff;
+        li {
+          overflow: hidden;
+          
+          a {
+            text-decoration: none;
+            color: #D3F4FA;
+            position: relative;
+            // font-family: 'Funnel Display';
+            font-weight: 500;
+            text-wrap: nowrap;
+
+            &::before {
+              content: '';
+              position: absolute;
+              bottom: -1px;
+              left: 0;
+              width: 100%;
+              height: 1px;
+              background-color: #D3F4FA;
+              transform: translateX(-105%);
+              transition: transform 0.2s ease-in-out;
+            }
+
+            &.active,
+            &:is(:hover, :focus-visible) {
+              &::before {
+                transform: translateX(0);
+              }
+            }
+          }
         }
       }
-  
       .strideSpan {
+        color: #D3F4FA;
+        text-decoration: none;
         font-weight: 600;
         text-transform: uppercase;
         font-size: 2rem;

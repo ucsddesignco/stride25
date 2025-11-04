@@ -46,6 +46,13 @@
     height: 80%;
     object-fit: contain;
     margin-bottom: auto;
+    transition: scale 0.2s ease-in-out;
+
+
+    &:hover {
+      scale: 1.05;
+      transition: scale 0.2s ease-in-out;
+    }
   }
 
   .field-text {

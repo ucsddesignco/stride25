@@ -25,7 +25,7 @@ const Accordion = styled((props: AccordionProps) => (
 
 const AccordionSummary = styled((props: AccordionSummaryProps) => (
   <MuiAccordionSummary
-    expandIcon={<ArrowRightIcon sx={{ fontSize: "2rem", color: "#B8E5ED" }} />}
+    expandIcon={<ArrowRightIcon sx={{ fontSize: "2rem", color: "#B8E5ED"}} />}
     {...props}
   />
 ))(({ theme }) => ({
@@ -69,6 +69,7 @@ export default function CustomizedAccordions() {
           <a href="mailto:designatucsd@gmail.com">designatucsd@gmail.com</a>
         </p>
       </div>
+      
       <div className="accordionContainer">
         {/* first column */}
         <div className="accordion1">
