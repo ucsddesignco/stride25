@@ -25,6 +25,8 @@ export default function IcebreakerSection() {
   const [currentText, setCurrentText] = useState<string>('')
   const [disableTransition] = useState(false)
   const [isMouseDown, setIsMouseDown] = useState(false)
+  const [showShatterButton, setShowShatterButton] = useState(true)
+  const hasShatteredRef = useRef(false)
 
   const didMountRef = useRef(false)
   const [overlayReady, setOverlayReady] = useState(false)
@@ -63,8 +65,14 @@ export default function IcebreakerSection() {
     setShowText(false)
     const clearId = setTimeout(() => {
       setCurrentText('')
-    }, 400) // match CSS transition duration in IcebreakerSection.scss
+    }, 850) // match CSS transition duration + delay in IcebreakerSection.scss
     return () => clearTimeout(clearId)
+  }, [selectedCategory])
+
+  // Reset shatter button visibility when category changes
+  useEffect(() => {
+    setShowShatterButton(true)
+    hasShatteredRef.current = false
   }, [selectedCategory])
 
   const params = useMemo<Params>(() => ({
@@ -92,6 +100,11 @@ export default function IcebreakerSection() {
   const handleParamsChange = useCallback(() => { }, [])
 
   const handleShatter = useCallback(() => {
+    // Hide button on first shatter
+    if (!hasShatteredRef.current) {
+      hasShatteredRef.current = true
+      setShowShatterButton(false)
+    }
     // subsequent shatters: hide instantly then fade back in
     setShowText(false)
     // force reflow via key change to restart CSS animation if needed
@@ -178,6 +191,22 @@ export default function IcebreakerSection() {
         >
           {displayText}
         </div>
+        {showShatterButton && (
+          <div 
+            className="shatter-button"
+            style={{
+              outline: 'none',
+              outlineWidth: 0,
+              outlineStyle: 'none',
+              outlineColor: 'transparent',
+              boxShadow: 'none',
+              WebkitBoxShadow: 'none',
+              MozBoxShadow: 'none',
+            } as React.CSSProperties}
+          >
+            Click to shatter
+          </div>
+        )}
       </div>
 
       <h1>Register for Stride!</h1>

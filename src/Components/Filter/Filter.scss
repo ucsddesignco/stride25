@@ -24,6 +24,14 @@
   user-select: none;
 }
 
+/* Prevent text and icon selection within the FilterDesktop component */
+.filter-desktop, .filter-desktop * {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 /* Prevent image dragging for icons/images inside the component */
 .filter-mobile img {
   -webkit-user-drag: none;
