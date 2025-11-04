@@ -18,6 +18,7 @@ interface Circle {
   accentColor?: string;
   isHovered: boolean;
   isPressed: boolean;
+  description: string;
 }
 
 // Collapsed bubble component (100px)
@@ -111,7 +112,7 @@ function AccentBubble({
 }
 
 // Expanded bubble component with logo and text content
-function BubbleExpanded() {
+function BubbleExpanded({desc}: {desc: string}) {
   return (
     <div className={styles.expandedBubble}>
       {/* Scaled down logo */}
@@ -178,7 +179,7 @@ function BubbleExpanded() {
       
       {/* Text content */}
       <div className={styles.textContent}>
-        The Art of Problem Solving is a company dedicated to enhancing the mathematical skills of students through innovative resources and engaging courses.
+        {desc}
 
       </div>
     </div>
@@ -251,6 +252,7 @@ export function BubbleCluster({
         bubbleType: "main",
         isHovered: false,
         isPressed: false,
+        description: 'test2'
       }),
     );
 
@@ -655,7 +657,7 @@ export function BubbleCluster({
               <div className={styles.bubbleContent}>
                 {circle.bubbleType === "main" ? (
                   circle.isExpanded ? (
-                    <BubbleExpanded />
+                    <BubbleExpanded desc={circle.description}/>
                   ) : (
                     <BubbleCollapsed />
                   )
