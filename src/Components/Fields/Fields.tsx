@@ -2,11 +2,11 @@ import useEmblaCarousel from "embla-carousel-react";
 import "./Fields.scss";
 
 const fieldsData = [
-  { image: "/images/field1.png", text: "Product Design" },
-  { image: "/images/field2.png", text: "Copywriting" },
-  { image: "/images/field3.png", text: "Design Engineering" },
-  { image: "/images/field4.png", text: "UX Research" },
-  { image: "/images/field5.png", text: "Software Engineering" },
+  { image: "/images/FieldsSVG/Product Design.svg", text: "Product Design" },
+  { image: "/images/FieldsSVG/Copywriting.svg", text: "Copywriting" },
+  { image: "/images/FieldsSVG/Design Engineering.svg", text: "Design Engineering" },
+  { image: "/images/FieldsSVG/UX Research.svg", text: "UX Research" },
+  { image: "/images/FieldsSVG/Software Engineering.svg", text: "Software Engineering" },
 ];
 
 export default function Fields() {
