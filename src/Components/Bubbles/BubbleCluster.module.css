@@ -19,6 +19,14 @@
   );
 }
 
+.filterContainer {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+}
+
 .resetButton {
   position: absolute;
   top: 1rem;
@@ -29,7 +37,7 @@
   backdrop-filter: blur(4px);
   border-radius: 9999px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
+  color: #D3F4FA;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -43,14 +51,6 @@
   transform: scale(0.98);
 }
 
-.instructions {
-  position: absolute;
-  top: 1rem;
-  left: 1rem;
-  z-index: 20;
-  color: rgba(255, 255, 255, 0.9);
-  max-width: 20rem;
-}
 
 .instructions p {
   font-size: 0.875rem;
@@ -105,7 +105,7 @@
 .expandedBubble {
   width: 100%;
   height: 100%;
-  background-color: #dcf7ff;
+  background: linear-gradient(180deg, rgba(103, 175, 203, 0.12) 0%, rgba(103, 175, 203, 1) 100%);
   border-radius: 9999px;
   display: flex;
   flex-direction: column;
@@ -113,11 +113,28 @@
   justify-content: center;
   padding: 2rem;
   text-align: center;
-
+  box-sizing: border-box;
 }
 
 .logoContainer {
-  margin-bottom: -0.75rem;
+  margin-bottom: -5rem;
+  margin-top: -4rem;
+}
+
+.categoryLabel {
+  color: #D3F4FA;
+  text-align: center;
+  font-family: "Albert Sans", sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-bottom: 0;
+  margin-top: -0.5rem;
+}
+
+.expandedHeading {
+  text-align: center;
 }
 
 .logoSvg {
@@ -135,17 +152,35 @@
 
 .textContent {
   max-width: 17.5rem;
-  color: #1b365d;
+  width: 100%;
+  color: #D3F4FA;
   font-family: "Reddit Sans";
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
   line-height: 110%;
   margin: 0;
+  padding: 0 1rem;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  margin-top: 1.2rem;
 }
 
-.bubble-button {
-    background-color: red;
-    height: 20px;
-    width: 20px;
+.logoText {
+  word-spacing: 0.2em;
+}
+
+/* Fade-in animation for text content after bubble expansion */
+.fadeInContent {
+  opacity: 0;
+  animation: fadeIn 0.5s ease-in-out 0.3s forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

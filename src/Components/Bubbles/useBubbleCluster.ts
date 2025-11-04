@@ -1,12 +1,14 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, startTransition } from 'react';
 import type { BubbleClusterProps, Circle } from './types';
-import { CompanyData } from './CompanyData';
+import { CompanyData, type BubbleCategory } from './CompanyData';
 
-export function useBubbleCluster(_props?: BubbleClusterProps) {
+export function useBubbleCluster(category: BubbleCategory = 'Recruiting', _props?: BubbleClusterProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number>(0);
   const [circles, setCircles] = useState<Circle[]>([]);
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
+  const previousCategoryRef = useRef<BubbleCategory | null>(null);
+  const regenerationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const updateSize = () => {
@@ -22,48 +24,92 @@ export function useBubbleCluster(_props?: BubbleClusterProps) {
 
   useEffect(() => {
     if (containerSize.width === 0 || containerSize.height === 0) return;
-    const margin = 20;
+    
+    const isCategoryChange = previousCategoryRef.current !== null && previousCategoryRef.current !== category;
+    previousCategoryRef.current = category;
+    
+    const generateCircles = () => {
+      const margin = 20;
 
-    const mainBubbles: Circle[] = CompanyData.map((company) => ({
-      id: company.id,
-      x: Math.random() * (containerSize.width - 150 - margin * 2) + 75 + margin,
-      y: Math.random() * (containerSize.height - 150 - margin * 2) + 75 + margin,
-      vx: (Math.random() - 0.5) * 0.5,
-      vy: (Math.random() - 0.5) * 0.5,
-      size: 100,
-      targetSize: 100,
-      isExpanded: false,
-      isInteractable: true,
-      bubbleType: 'main',
-      isHovered: false,
-      isPressed: false,
-      description: company.description,
-    }));
-
-    const accentSizes = [30, 35, 50, 40, 25, 45, 28, 42, 32, 38, 27, 48];
-    const accentColors = ['#A8EAFC', '#DCF7FF'];
-
-    const accentBubbles: Circle[] = Array.from({ length: 12 }, (_, i) => {
-      const size = accentSizes[i];
-      return {
-        id: i + 100,
-        x: Math.random() * (containerSize.width - size - margin * 2) + size / 2 + margin,
-        y: Math.random() * (containerSize.height - size - margin * 2) + size / 2 + margin,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
-        size,
-        targetSize: size,
+      // Get companies for the selected category
+      const companies = CompanyData[category];
+      const mainBubbles: Circle[] = companies.map((company) => ({
+        id: company.id,
+        x: Math.random() * (containerSize.width - 150 - margin * 2) + 75 + margin,
+        y: Math.random() * (containerSize.height - 150 - margin * 2) + 75 + margin,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        size: 100,
+        targetSize: 100,
         isExpanded: false,
-        isInteractable: false,
-        bubbleType: 'accent',
-        accentColor: accentColors[i % accentColors.length],
+        isInteractable: true,
+        bubbleType: 'main',
         isHovered: false,
         isPressed: false,
-      } as Circle;
-    });
+        description: company.description,
+        logo: company.logo,
+        name: company.name,
+        category: company.category,
+      }));
 
-    setCircles([...mainBubbles, ...accentBubbles]);
-  }, [containerSize]);
+      const accentSizes = [30, 35, 50, 40, 25, 45, 28, 42, 32, 38, 27, 48];
+      const accentColors = ['#A8EAFC', '#DCF7FF'];
+
+      const accentBubbles: Circle[] = Array.from({ length: 12 }, (_, i) => {
+        const size = accentSizes[i];
+        return {
+          id: i + 100,
+          x: Math.random() * (containerSize.width - size - margin * 2) + size / 2 + margin,
+          y: Math.random() * (containerSize.height - size - margin * 2) + size / 2 + margin,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: (Math.random() - 0.5) * 0.3,
+          size,
+          targetSize: size,
+          isExpanded: false,
+          isInteractable: false,
+          bubbleType: 'accent',
+          accentColor: accentColors[i % accentColors.length],
+          isHovered: false,
+          isPressed: false,
+        } as Circle;
+      });
+
+      setCircles([...mainBubbles, ...accentBubbles]);
+    };
+    
+    if (isCategoryChange) {
+      // Clear any pending regeneration
+      if (regenerationTimeoutRef.current) {
+        clearTimeout(regenerationTimeoutRef.current);
+      }
+      
+      // Use startTransition to mark this as a non-urgent update
+      // This allows the filter animation to run smoothly without being blocked
+      startTransition(() => {
+        // Don't clear circles immediately - keep them visible during animation
+        // Regenerate after animation completes
+        regenerationTimeoutRef.current = setTimeout(() => {
+          startTransition(() => {
+            setCircles([]);
+            // Generate new circles in the next frame
+            requestAnimationFrame(() => {
+              generateCircles();
+            });
+          });
+        }, 200); // Wait for animation to complete (150ms transition + 50ms buffer)
+      });
+    } else {
+      // On initial mount or container resize, generate immediately
+      generateCircles();
+    }
+    
+    return () => {
+      if (regenerationTimeoutRef.current) {
+        clearTimeout(regenerationTimeoutRef.current);
+        regenerationTimeoutRef.current = null;
+      }
+    };
+  }, [containerSize, category]);
 
   useEffect(() => {
     if (circles.length === 0) return;
