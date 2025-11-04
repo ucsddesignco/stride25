@@ -7,6 +7,12 @@
   --XS: 12px;
 }
 
+@media (max-width: 767px) {
+  :root {
+    --XXL: 20px;
+  }
+}
+
 *,
 *::before,
 *::after {
@@ -181,6 +187,10 @@ h6 {
     'Helvetica Neue',
     sans-serif;
   text-wrap: pretty;
+}
+
+h2 {
+  line-height: 1.15;
 }
 
 p,

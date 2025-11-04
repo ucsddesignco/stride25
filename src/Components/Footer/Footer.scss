@@ -8,6 +8,10 @@ footer {
     padding: 2rem 2rem;
     font-weight: 500;
 
+    @media (max-width: 767px) {
+        padding: 2rem 20px;
+    }
+
     @media(max-width: 393px){
         flex-direction: column;
     }

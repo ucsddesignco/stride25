@@ -32,6 +32,10 @@ export default function Filter({
   const isInitialRenderRef = useRef(true)
   const [indicatorReady, setIndicatorReady] = useState(false)
   const [noTransition, setNoTransition] = useState(true)
+  const [animationState, setAnimationState] = useState<'idle' | 'squeezing' | 'stretching' | 'returning'>('idle')
+  const [stretchScale, setStretchScale] = useState(1.06)
+  const [squeezeScale, setSqueezeScale] = useState(0.9)
+  const previousSelectedIndexRef = useRef<number>(-1)
 
   const getValue = useMemo(() => externalGetValue || ((opt: CategoryOption) => (typeof opt === 'string' ? opt : opt.value)), [externalGetValue])
   const getLabel = useMemo(() => externalGetLabel || ((opt: CategoryOption) => (typeof opt === 'string' ? opt : opt.label)), [externalGetLabel])
@@ -224,6 +228,74 @@ export default function Filter({
     }
   }, [selectedIndex, categories])
 
+  // Handle slider animation when category selection changes
+  useEffect(() => {
+    // Skip animation on initial render or if indicator isn't ready
+    if (isInitialRenderRef.current || !indicatorReady || noTransition) {
+      previousSelectedIndexRef.current = selectedIndex
+      return
+    }
+
+    // Only animate if the selected index actually changed
+    if (selectedIndex === previousSelectedIndexRef.current) {
+      return
+    }
+
+    // Calculate distance traveled by slider
+    const distance = Math.abs(selectedIndex - previousSelectedIndexRef.current)
+    
+    // Calculate stretch scale based on distance
+    // Closer = less stretch, farther = more stretch
+    // Distance 1 = minimal stretch (1.02), Distance 5+ = max stretch (1.06)
+    const minStretch = 1.0
+    const maxStretch = 1.06
+    const maxDistance = 5
+    const normalizedDistance = Math.min(distance, maxDistance) / maxDistance
+    const calculatedStretch = minStretch + (maxStretch - minStretch) * normalizedDistance
+    setStretchScale(calculatedStretch)
+    
+    // Calculate squeeze scale based on distance
+    // Closer = less squeeze, farther = more squeeze
+    // Distance 1 = minimal squeeze (0.93), Distance 5+ = max squeeze (0.9)
+    const minSqueeze = 0.99
+    const maxSqueeze = 0.95
+    const calculatedSqueeze = maxSqueeze + (minSqueeze - maxSqueeze) * (1 - normalizedDistance)
+    setSqueezeScale(calculatedSqueeze)
+
+    // Start squeezing animation when slider begins to move
+    setAnimationState('squeezing')
+
+    // Use requestAnimationFrame to ensure the squeeze state is applied to DOM
+    let stretchTimeout: ReturnType<typeof setTimeout> | null = null
+    
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        // Start stretching after squeeze has had time to apply
+        stretchTimeout = setTimeout(() => {
+          setAnimationState('stretching')
+          
+          // After stretch completes, return to normal
+          setTimeout(() => {
+            setAnimationState('returning')
+            
+            // After return completes, go back to idle
+            setTimeout(() => {
+              setAnimationState('idle')
+            }, 200) // Match the return transition duration
+          }, 300) // Match the stretch transition duration
+        }, 100) // Give squeeze time to be visible
+      })
+    })
+
+    previousSelectedIndexRef.current = selectedIndex
+
+    return () => {
+      if (stretchTimeout) {
+        clearTimeout(stretchTimeout)
+      }
+    }
+  }, [selectedIndex, indicatorReady, noTransition])
+
   const mobileButtonLabel = useMemo(() => {
     if (!categories.length) return 'Select'
     if (!effectiveSelectedCategory) return 'Select'
@@ -280,7 +352,21 @@ export default function Filter({
 
       {/* Desktop Version */}
       <div className={`filter-desktop${className ? ` ${className}` : ''}`}>
-        <div className="filter-slider" ref={sliderRef} role="group" aria-label={ariaLabel || 'Filter categories'} data-initializing={!indicatorReady}>
+        <div 
+          className={`filter-slider ${
+            animationState === 'squeezing' ? 'animation-squeezing' :
+            animationState === 'stretching' ? 'animation-stretching' :
+            animationState === 'returning' ? 'animation-returning' : ''
+          }`}
+          ref={sliderRef} 
+          role="group" 
+          aria-label={ariaLabel || 'Filter categories'} 
+          data-initializing={!indicatorReady}
+          style={{
+            '--stretch-scale': stretchScale,
+            '--squeeze-scale': squeezeScale
+          } as React.CSSProperties}
+        >
           <div 
             className="filter-slider-indicator" 
             style={{ 

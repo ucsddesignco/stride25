@@ -149,6 +149,24 @@
   flex-wrap: nowrap;
   width: fit-content;
   position: relative;
+  transform: scaleX(1);
+  transform-origin: center;
+  transition: transform 0.2s ease-out;
+
+  &.animation-squeezing {
+    transform: scaleX(var(--squeeze-scale, 0.9)) !important;
+    transition: transform 0.15s ease-in !important;
+  }
+
+  &.animation-stretching {
+    transform: scaleX(var(--stretch-scale, 1.06));
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &.animation-returning {
+    transform: scaleX(1);
+    transition: transform 0.2s ease-out;
+  }
 }
 
 .filter-slider-indicator {

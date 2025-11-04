@@ -31,7 +31,8 @@
         font-weight: 500;
 
         @media(max-width: 678px){
-            margin-left: 2rem;
+            margin-left: 20px;
+            padding-left: 0;
         }
     }
     .eventsContainer{
@@ -42,8 +43,8 @@
         display: flex;
         align-items: center;
         gap: 2rem;
-        flex-wrap: wrap;
-        @media(max-width:894px){
+        flex-wrap: nowrap;
+        @media(max-width:1140px){
 
             display: flex;
             flex-direction: column-reverse;
@@ -54,7 +55,7 @@
         }
 
         @media(max-width: 678px){
-            margin-left: 3rem;
+            margin-left: 20px;
         }
 
     }
