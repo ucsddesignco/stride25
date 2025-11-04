@@ -1,4 +1,5 @@
 import useEmblaCarousel from "embla-carousel-react";
+import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
 import "./Fields.scss";
 
 const fieldsData = [
@@ -10,16 +11,19 @@ const fieldsData = [
 ];
 
 export default function Fields() {
-  const [emblaRef] = useEmblaCarousel({
-    loop: false,
-    dragFree: true,
-    containScroll: "trimSnaps",
-  });
+  const [emblaRef] = useEmblaCarousel(
+    {
+      loop: false,
+      dragFree: true,
+      containScroll: "trimSnaps",
+    },
+    [WheelGesturesPlugin({ forceWheelAxis: "x" })]
+  );
 
   return (
     <div className="fields">
       <p className="fields-title">
-        Discover Fields Dedicated to Craft & Problem Solving
+        Discover Fields Dedicated to Craft & Problem Solving.
       </p>
       <div className="fields-wrapper">
         <div className="fields-container embla" ref={emblaRef}>
