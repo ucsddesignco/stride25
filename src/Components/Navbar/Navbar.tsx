@@ -46,9 +46,9 @@ export default function Navbar() {
         </div>
         <div className="mobile-menu-content">
           <ul>
-            <li>Overview</li>
-            <li>Companies</li>
-            <li>Prepare</li>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#bubbles">Companies</a></li>
+            <li><a href="#icebreaker">Prepare</a></li>
           </ul>
           <Button text='Register now for $6' icon={<PriceTag/>} className='priceHero' link='https://luma.com/voxmkrg3'/>
           </div>
