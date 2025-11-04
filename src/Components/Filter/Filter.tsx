@@ -121,7 +121,7 @@ export default function Filter({
     }
 
     return
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [isOpen, isClosing])
 
   const handleCategorySelect = (category: string) => {
