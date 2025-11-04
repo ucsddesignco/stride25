@@ -1,0 +1,239 @@
+/* Mobile Version */
+.filter-mobile {
+  width: fit-content;
+  position: relative;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+}
+
+.filter-desktop {
+  display: none;
+
+  @media (min-width: 768px) {
+    display: block;
+  }
+}
+
+/* Prevent text and icon selection within the FilterMobile component */
+.filter-mobile, .filter-mobile * {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Prevent text and icon selection within the FilterDesktop component */
+.filter-desktop, .filter-desktop * {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Prevent image dragging for icons/images inside the component */
+.filter-mobile img {
+  -webkit-user-drag: none;
+}
+
+.filter-menu {
+  background-color: #477a9e;
+  padding: 12px 16px 12px 8px;
+  border-radius: 16px;
+  display: grid;
+  grid-auto-rows: minmax(16px, auto);
+  gap: 16px 24px;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0px;
+  width: max-content;
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.1s ease-out, transform 0.1s ease-out;
+
+  &.closing {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  .filter-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    font-family: 'Bricolage Grotesque';
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1;
+    color: #ccedf4;
+    cursor: pointer;
+    margin: 0;
+    white-space: nowrap;
+    background: transparent;
+    border: 0;
+    padding: 0;
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    .indicator {
+      width: 16px;
+      height: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      img { width: 100%; height: 100%; }
+    }
+
+    .label { margin: 0; }
+  }
+}
+
+.filter-menu.cols-1 { grid-template-columns: 1fr; }
+.filter-menu.cols-2 { grid-template-columns: repeat(2, auto); }
+.filter-menu.cols-3 { grid-template-columns: repeat(3, auto); }
+
+.filter-padding {
+  padding: 0 14px 0 14px;
+  width: fit-content;
+  min-width: 178px;
+}
+
+.filter-button {
+  background-color: #ccedf4;
+  border-radius: 8px;
+  padding: 4px 6px 4px 10px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 150px;
+  width: 100%;
+
+  .filter-button-text {
+    font-family: 'Bricolage Grotesque';
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1;
+    color: #09456f;
+    white-space: nowrap;
+    margin: 0;
+  }
+
+  .dropdown-icon {
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+/* Desktop Slider Version */
+.filter-slider {
+  background-color: #477a9e;
+  padding: 4px;
+  border-radius: 8px;
+  display: flex;
+  gap: 0px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  width: fit-content;
+  position: relative;
+  transform: scaleX(1);
+  transform-origin: center;
+  transition: transform 0.2s ease-out;
+
+  &.animation-squeezing {
+    transform: scaleX(var(--squeeze-scale, 0.9)) !important;
+    transition: transform 0.15s ease-in !important;
+  }
+
+  &.animation-stretching {
+    transform: scaleX(var(--stretch-scale, 1.06));
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &.animation-returning {
+    transform: scaleX(1);
+    transition: transform 0.2s ease-out;
+  }
+}
+
+.filter-slider-indicator {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  background-color: #ccedf4;
+  border-radius: 4px;
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Disable initial transitions while initializing to avoid any wipe-in */
+.filter-slider[data-initializing='true'] .filter-slider-indicator {
+  transition: none !important;
+  visibility: hidden;
+}
+.filter-slider[data-initializing='true'] .filter-chip::before {
+  transition: none !important;
+}
+
+.filter-chip {
+  font-family: 'Bricolage Grotesque';
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 28px;
+  padding: 0 16px;
+  height: 28px;
+  border-radius: 2px;
+  border: 0;
+  background: transparent;
+  color: #ccedf4;
+  cursor: pointer;
+  white-space: nowrap;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  // Dark text layer that gets clipped
+  &::before {
+    content: attr(aria-label);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    color: #09456f;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    clip-path: var(--chip-clip, inset(0 100% 0 0));
+    transition: clip-path 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  // Set the button's text content to be the accessible label
+  &[aria-label] {
+    color: #ccedf4;
+  }
+}
+
+
+
+

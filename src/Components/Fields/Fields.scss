@@ -54,21 +54,27 @@
   }
 }
 
-@media (min-width: 1440px) {
-  .fields-container {
+@media (min-width: 1441px) {
+  .fields-title {
+    padding: 3.75rem 18rem 1.8rem 18rem;
     overflow: visible;
-
-    .embla__container {
-      flex-wrap: wrap;
-    }
-
-    .field-card {
-      flex: 1 1;
-      transition: transform 0.2s ease;
-
-      &:hover {
-        transform: translateY(-4px);
-      }
-    }
+  }
+  .embla__container {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .fields-container {
+    width: 100%;
+    padding: 0 18rem;
+  }
+}
+@media (max-width: 766px) {
+  .fields-title {
+    padding: 3.75rem 20px 1.8rem 20px;
+    overflow: visible;
+  }
+  .fields-container {
+    width: 100%;
+    padding: 0 20px;
   }
 }

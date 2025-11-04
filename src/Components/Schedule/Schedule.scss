@@ -24,14 +24,25 @@
       margin-bottom: 1rem;
       text-align: left;
     }
-    .subtitle {
-      display: flex;
-      text-decoration: underline;
-      text-decoration-skip-ink: None;
-      gap: 8px;
-      align-items: center;
+    .outer{
       font-family: "Reddit Sans";
+      font-weight: normal;
+      color: #D3F4FA;
       font-size: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0px;
+      align-items: flex-start;
+    }
+
+    .outer .inner{
+      opacity: 0.8;
+      font-family: "Reddit Sans";
+      display: flex;
+      font-size: 0.9rem;
+      gap: 0.5rem;
+      text-decoration: underline;
+      font-weight: normal;
     }
   }
 
@@ -119,7 +130,13 @@
   .schedule-container-mobile {
     display: flex;
     margin: 80px 0 0 0;
-    padding: 0 64px;
-    flex-direction: column
+    padding: 0 20px;
+    flex-direction: column;
+  }
+}
+
+@media (min-width: 1441px) {
+  .schedule-container {
+    padding: 3.75rem 18rem;
   }
 }

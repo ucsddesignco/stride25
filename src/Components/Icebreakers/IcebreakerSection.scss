@@ -1,0 +1,194 @@
+#icebreaker {
+
+  .canvas-wrapper {
+    position: relative;
+
+    .icebreaker-overlay-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 5;
+      color: #07121C;
+      text-align: center;
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: 24px;
+      line-height: 1.4;
+      opacity: 0;
+      transition: opacity 300ms ease;
+      pointer-events: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      /* Almost-white blue glow (matches ice text tone) */
+      text-shadow:
+        0 0 16px rgba(211, 244, 250, 0.95),
+        0 0 48px rgba(211, 244, 250, 0.50),
+    }
+
+    .icebreaker-overlay-text.visible {
+      opacity: 1;
+      transition: opacity 1200ms ease-in;
+    }
+
+    .icebreaker-overlay-text.no-transition {
+      transition: none;
+    }
+
+    .filter-overlay {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%) translateY(calc(100% + 50px)) translateZ(0);
+      z-index: 10;
+      pointer-events: none;
+      opacity: 0;
+      will-change: transform, opacity;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+
+      &.visible {
+        animation: filterSlideUp 0.9s cubic-bezier(0.34, 1.25, 0.45, 1) forwards;
+      }
+
+      > * {
+        pointer-events: all;
+        cursor: default; // Reset cursor for filter controls
+      }
+    }
+
+    @keyframes filterSlideUp {
+      0% {
+        transform: translateX(-50%) translateY(calc(100% + 50px)) translateZ(0);
+        opacity: 0;
+      }
+      100% {
+        transform: translateX(-50%) translateY(0) translateZ(0);
+        opacity: 1;
+      }
+    }
+
+    .shatter-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 6;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 24px 8px 16px;
+      width: 176px;
+      height: 40px;
+      background-color: #031019;
+      border: none;
+      border-radius: 5px;
+      font-family: 'Bricolage Grotesque', sans-serif;
+      pointer-events: none;
+      outline: none !important;
+      box-shadow: none !important;
+      -webkit-box-shadow: none !important;
+      -moz-box-shadow: none !important;
+      text-shadow: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      isolation: isolate;
+      box-sizing: border-box;
+
+      &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 4px;
+        pointer-events: none;
+        outline: none !important;
+        box-shadow: none !important;
+        -webkit-box-shadow: none !important;
+        -moz-box-shadow: none !important;
+      }
+
+      .shatter-button-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: 24px;
+        height: 24px;
+        color: white;
+
+        svg {
+          display: block;
+          width: 100%;
+          height: 100%;
+          max-width: none;
+          transform: scaleX(-1);
+        }
+      }
+
+      .shatter-button-text {
+        font-family: 'Bricolage Grotesque', sans-serif;
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 1;
+        color: white;
+        white-space: nowrap;
+        margin: 0;
+        flex-shrink: 0;
+      }
+    }
+
+    .custom-cursor {
+      position: fixed;
+      z-index: 100;
+      pointer-events: none;
+      transform: translate(-4px, -20px) scaleX(-1);
+      will-change: transform;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+
+      * {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      .custom-cursor-rotor {
+        transform-origin: 20% 75%;
+        will-change: transform;
+        animation: none;
+
+        &.swinging {
+          animation: hammerSwing 360ms cubic-bezier(0.2, 0.7, 0.2, 1.05) both;
+        }
+      }
+    }
+
+    @keyframes hammerSwing {
+      0% { /* anticipation (reduced clockwise) */
+        transform: rotate(-10deg);
+      }
+      16% {
+        transform: rotate(-30deg);
+      }
+      50% { /* stronger counter-clockwise strike */
+        transform: rotate(40deg);
+      }
+      78% { /* follow-through overshoot back */
+        transform: rotate(50deg);
+      }
+      100% { /* settle at rest */
+        transform: rotate(0deg);
+      }
+    }
+  }
+}
+

@@ -2,7 +2,7 @@ import { accordionData } from "./data";
 import "./Accordion.scss";
 import * as React from "react";
 import { styled } from "@mui/material/styles";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import MuiAccordion, { type AccordionProps } from "@mui/material/Accordion";
 import MuiAccordionSummary, {
   type AccordionSummaryProps,
@@ -25,7 +25,7 @@ const Accordion = styled((props: AccordionProps) => (
 
 const AccordionSummary = styled((props: AccordionSummaryProps) => (
   <MuiAccordionSummary
-    expandIcon={<PlayArrowIcon sx={{ fontSize: "0.9rem", color: "#B8E5ED" }} />}
+    expandIcon={<ArrowRightIcon sx={{ fontSize: "2rem", color: "#B8E5ED" }} />}
     {...props}
   />
 ))(({ theme }) => ({
@@ -65,8 +65,8 @@ export default function CustomizedAccordions() {
       <div className="faqText">
         <h1>Frequently Asked Questions</h1>
         <p>
-          Any other questions? Reach out via <span>Instagram</span> or{" "}
-          <span>designatucsd@gmail.com</span>
+          Any other questions? Reach out via <a href="https://www.instagram.com/designcoatucsd/" target="_blank">Instagram</a> or{" "}
+          <a href="mailto:designatucsd@gmail.com">designatucsd@gmail.com</a>
         </p>
       </div>
       <div className="accordionContainer">
