@@ -155,17 +155,17 @@
 
   &.animation-squeezing {
     transform: scaleX(var(--squeeze-scale, 0.9)) !important;
-    transition: transform 0.15s ease-in !important;
+    transition: transform 0.08s ease-in !important;
   }
 
   &.animation-stretching {
     transform: scaleX(var(--stretch-scale, 1.06));
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   &.animation-returning {
     transform: scaleX(1);
-    transition: transform 0.2s ease-out;
+    transition: transform 0.1s ease-out;
   }
 }
 
@@ -175,7 +175,7 @@
   bottom: 4px;
   background-color: #ccedf4;
   border-radius: 4px;
-  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: left 0.15s cubic-bezier(0.4, 0, 0.2, 1), width 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
   z-index: 0;
 }
@@ -223,7 +223,7 @@
     align-items: center;
     padding: 0 16px;
     clip-path: var(--chip-clip, inset(0 100% 0 0));
-    transition: clip-path 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: clip-path 0.15s cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: none;
     white-space: nowrap;
   }
