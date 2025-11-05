@@ -29,6 +29,9 @@ importers:
       framer-motion:
         specifier: ^12.23.24
         version: 12.23.24(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      gsap:
+        specifier: ^3.13.0
+        version: 3.13.0
       hamburger-react:
         specifier: ^2.5.2
         version: 2.5.2(react@19.2.0)
@@ -1368,6 +1371,9 @@ packages:
 
   graphemer@1.4.0:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
+
+  gsap@3.13.0:
+    resolution: {integrity: sha512-QL7MJ2WMjm1PHWsoFrAQH/J8wUeqZvMtHO58qdekHpCfhvhSL4gSiz6vJf5EeMP0LOn3ZCprL2ki/gjED8ghVw==}
 
   hamburger-react@2.5.2:
     resolution: {integrity: sha512-xsv/I7wQX1RDaulDnvMVCXMMRXnkwnUnkE8seD5eNVZJ4nIrjtK5LLA20l5x/pJ+mPWOzlFxW32VJ86Gbo2Njw==}
@@ -3129,6 +3135,8 @@ snapshots:
   globals@16.4.0: {}
 
   graphemer@1.4.0: {}
+
+  gsap@3.13.0: {}
 
   hamburger-react@2.5.2(react@19.2.0):
     dependencies:
