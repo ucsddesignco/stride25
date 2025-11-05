@@ -1,5 +1,5 @@
 import './Navbar.scss'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Pivot as Hamburger } from 'hamburger-react'
 import Button from '../Button/Button'
 import PriceTag from '../../SVGS/PriceTag'
@@ -7,6 +7,72 @@ import PriceTag from '../../SVGS/PriceTag'
 export default function Navbar() {
   
   const [isOpen, setIsOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isVisible, setIsVisible] = useState(true)
+  const [lastScrollY, setLastScrollY] = useState(0)
+  const [scrollDownDistance, setScrollDownDistance] = useState(0)
+  const isInitialMount = useRef(true)
+  const SCROLL_THRESHOLD = 200 // Pixels to scroll down before hiding navbar
+
+  // Initialize scroll position on mount
+  useEffect(() => {
+    const initialScrollY = window.scrollY
+    setLastScrollY(initialScrollY)
+    setIsScrolled(initialScrollY > 0)
+    setIsVisible(true) // Always visible on initial load
+    setScrollDownDistance(0)
+    
+    // Mark initial mount as complete after a short delay
+    const timer = setTimeout(() => {
+      isInitialMount.current = false
+    }, 100)
+    
+    return () => clearTimeout(timer)
+  }, [])
+
+  // Handle scroll detection for blur and slide in/out
+  useEffect(() => {
+    const handleScroll = () => {
+      // Don't hide navbar on initial mount
+      if (isInitialMount.current) {
+        return
+      }
+
+      const currentScrollY = window.scrollY
+
+      // Check if scrolled from top
+      setIsScrolled(currentScrollY > 0)
+
+      // Determine scroll direction
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        // Scrolling down - accumulate scroll distance
+        const distance = currentScrollY - lastScrollY
+        const newScrollDownDistance = scrollDownDistance + distance
+        
+        setScrollDownDistance(newScrollDownDistance)
+        
+        // Only hide navbar after scrolling down threshold amount
+        if (newScrollDownDistance >= SCROLL_THRESHOLD) {
+          setIsVisible(false)
+        }
+      } else if (currentScrollY < lastScrollY) {
+        // Scrolling up - show navbar and reset scroll down distance
+        setIsVisible(true)
+        setScrollDownDistance(0)
+      }
+
+      // If at the top, always show navbar and reset distance
+      if (currentScrollY === 0) {
+        setIsVisible(true)
+        setScrollDownDistance(0)
+      }
+
+      setLastScrollY(currentScrollY)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [lastScrollY, scrollDownDistance])
 
   // Close the mobile menu when resizing above the breakpoint
   useEffect(() => {
@@ -20,7 +86,7 @@ export default function Navbar() {
   }, [isOpen])
 
   return (
-    <nav>
+    <nav className={`${isScrolled ? 'scrolled' : ''} ${!isVisible ? 'hidden' : ''}`}>
       {/* Desktop Nav */}
       <div id="desktop-nav">
         <a href="/" target="_self" className='strideSpan'>Stride</a>

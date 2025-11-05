@@ -1,0 +1,38 @@
+.content-wrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+
+  // Override component padding at large breakpoints to work within max-width constraint
+  @media (min-width: 1441px) {
+    #overview {
+      padding: 0 6rem !important;
+    }
+
+    .schedule-container {
+      padding: 3.75rem 6rem !important;
+    }
+
+    .fields-title {
+      padding: 3.75rem 6rem 1.8rem 6rem !important;
+    }
+
+    .fields-container {
+      padding: 0 6rem !important;
+    }
+
+    #faq {
+      padding: 0 6rem !important;
+    }
+
+    #bubbles {
+      padding: 0 6rem !important;
+      padding-top: 6rem !important;
+    }
+
+    #icebreaker {
+      padding: 0 6rem !important;
+    }
+  }
+}
+
