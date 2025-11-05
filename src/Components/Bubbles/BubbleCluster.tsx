@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import styles from './BubbleCluster.module.css';
 import { AccentBubble } from './AccentBubble';
 import { BubbleCollapsed } from './BubbleCollapsed';
@@ -13,7 +13,7 @@ export function BubbleCluster({
   showResetButton = true,
 }: BubbleClusterProps) {
   const [selectedCategory, setSelectedCategory] = useState<BubbleCategory>('Recruiting');
-  const categories: BubbleCategory[] = ['Recruiting', 'Networking', 'Student Ambassadors'];
+  const categories: BubbleCategory[] = useMemo(() => ['Recruiting', 'Networking', 'Student Ambassadors'], []);
   
   const {
     containerRef,
