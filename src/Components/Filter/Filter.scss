@@ -151,21 +151,31 @@
   position: relative;
   transform: scaleX(1);
   transform-origin: center;
-  transition: transform 0.2s ease-out;
+  will-change: transform;
 
   &.animation-squeezing {
-    transform: scaleX(var(--squeeze-scale, 0.9)) !important;
-    transition: transform 0.08s ease-in !important;
+    transform: scaleX(var(--squeeze-scale, 0.95));
+    transition: transform 0.12s ease-in;
   }
 
   &.animation-stretching {
     transform: scaleX(var(--stretch-scale, 1.06));
-    transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   &.animation-returning {
     transform: scaleX(1);
-    transition: transform 0.1s ease-out;
+    transition: transform 0.15s ease-out;
+  }
+
+  &.animation-idle {
+    transform: scaleX(1);
+    transition: transform 0.2s ease-out;
+  }
+
+  // Default transition only when no animation state is active
+  &:not(.animation-squeezing):not(.animation-stretching):not(.animation-returning):not(.animation-idle) {
+    transition: transform 0.2s ease-out;
   }
 }
 
