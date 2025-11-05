@@ -3,6 +3,10 @@
   .canvas-wrapper {
     position: relative;
 
+    &.initial-state {
+      pointer-events: none;
+    }
+
     .icebreaker-overlay-text {
       // background-color: rebeccapurple;
       padding: 0 1rem;
@@ -84,14 +88,15 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 8px 24px 8px 16px;
+      padding: 22px 24px 22px 16px;
       width: 176px;
       height: 40px;
       background-color: #031019;
       border: none;
       border-radius: 5px;
       font-family: 'Bricolage Grotesque', sans-serif;
-      pointer-events: none;
+      pointer-events: auto;
+      cursor: pointer;
       outline: none !important;
       box-shadow: none !important;
       -webkit-box-shadow: none !important;

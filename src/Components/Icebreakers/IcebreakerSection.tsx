@@ -15,7 +15,9 @@ const MemoizedShatterCanvas = memo(ShatterCanvas, (prevProps, nextProps) => {
     prevProps.params === nextProps.params &&
     prevProps.onParamsChange === nextProps.onParamsChange &&
     prevProps.onShatter === nextProps.onShatter &&
-    prevProps.shatterSignal === nextProps.shatterSignal
+    prevProps.shatterSignal === nextProps.shatterSignal &&
+    prevProps.shatterPoint?.x === nextProps.shatterPoint?.x &&
+    prevProps.shatterPoint?.y === nextProps.shatterPoint?.y
   )
 })
 
@@ -43,6 +45,7 @@ export default function IcebreakerSection() {
   const [cursorSwingKey, setCursorSwingKey] = useState(0)
   const [shouldSwing, setShouldSwing] = useState(false)
   const cursorReadyRef = useRef(false)
+  const [shatterSignal, setShatterSignal] = useState(0)
 
   const formatWidont = useCallback((text: string) => {
     if (!text) return ''
@@ -344,7 +347,7 @@ export default function IcebreakerSection() {
 
       <div
         ref={canvasWrapperRef}
-        className={`canvas-wrapper ${isMouseDown ? 'clicking' : ''}`}
+        className={`canvas-wrapper ${isMouseDown ? 'clicking' : ''} ${showShatterButton ? 'initial-state' : ''}`}
       >
         {showFilter && (
           <div className={`filter-overlay ${filterReady ? 'visible' : ''}`}>
@@ -359,6 +362,8 @@ export default function IcebreakerSection() {
           params={params}
           onParamsChange={handleParamsChange}
           onShatter={handleShatter}
+          shatterSignal={shatterSignal}
+          shatterPoint={{ x: 0.5, y: 0.5 }}
         />
         <div
           key={flashKey}
@@ -370,7 +375,20 @@ export default function IcebreakerSection() {
           {displayText}
         </div>
         {showShatterButton && (
-          <div className="shatter-button">
+          <div 
+            className="shatter-button" 
+            onClick={() => {
+              // Trigger canvas shatter at center
+              setShatterSignal(prev => prev + 1)
+              // Call handleShatter after shatter is triggered
+              // Use double RAF to ensure shatter effect has started
+              requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                  handleShatter()
+                })
+              })
+            }}
+          >
             <div className="shatter-button-icon">
               <Hammer />
             </div>

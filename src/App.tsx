@@ -15,12 +15,14 @@ function App() {
     <>
       <Navbar />
       <Hero />
-      <Overview/>
-      <Schedule />
-      <Fields />
-      <Accordion />
-      <Bubbles />
-      <IcebreakerSection />
+      <div className="content-wrapper">
+        <Overview/>
+        <Schedule />
+        <Fields />
+        <Accordion />
+        <Bubbles />
+        <IcebreakerSection />
+      </div>
       <Footer />
     </>
   );
