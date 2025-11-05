@@ -244,57 +244,81 @@ export default function Filter({
     // Calculate distance traveled by slider
     const distance = Math.abs(selectedIndex - previousSelectedIndexRef.current)
     
+    // For very small distances or no distance, skip animation
+    if (distance === 0) {
+      previousSelectedIndexRef.current = selectedIndex
+      return
+    }
+    
     // Calculate stretch scale based on distance
     // Closer = less stretch, farther = more stretch
-    // Distance 1 = minimal stretch (1.02), Distance 5+ = max stretch (1.06)
+    // Distance 1 = minimal stretch (1.02), max distance = max stretch (1.06)
     const minStretch = 1.0
-    const maxStretch = 1.06
-    const maxDistance = 5
+    const maxStretch = 1.05
+    // Use dynamic maxDistance based on number of categories (max possible distance is categories.length - 1)
+    // Ensure minimum of 1 to avoid division by zero
+    const maxDistance = Math.max(1, categories.length - 1)
     const normalizedDistance = Math.min(distance, maxDistance) / maxDistance
     const calculatedStretch = minStretch + (maxStretch - minStretch) * normalizedDistance
     setStretchScale(calculatedStretch)
     
     // Calculate squeeze scale based on distance
     // Closer = less squeeze, farther = more squeeze
-    // Distance 1 = minimal squeeze (0.93), Distance 5+ = max squeeze (0.9)
+    // Distance 1 = minimal squeeze (0.93), max distance = max squeeze (0.9)
     const minSqueeze = 0.99
     const maxSqueeze = 0.95
     const calculatedSqueeze = maxSqueeze + (minSqueeze - maxSqueeze) * (1 - normalizedDistance)
     setSqueezeScale(calculatedSqueeze)
 
-    // Start squeezing animation when slider begins to move
-    setAnimationState('squeezing')
-
-    // Use requestAnimationFrame to ensure the squeeze state is applied to DOM
+    // Track all timeouts and RAFs for proper cleanup
+    let mounted = true
     let stretchTimeout: ReturnType<typeof setTimeout> | null = null
-    
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
+    let returnTimeout: ReturnType<typeof setTimeout> | null = null
+    let idleTimeout: ReturnType<typeof setTimeout> | null = null
+    let rafId1: number | null = null
+    let rafId2: number | null = null
+
+    // Use requestAnimationFrame to ensure any previous animation state is cleared
+    rafId1 = requestAnimationFrame(() => {
+      if (!mounted) return
+      // Start squeezing animation when slider begins to move
+      setAnimationState('squeezing')
+      
+      rafId2 = requestAnimationFrame(() => {
+        if (!mounted) return
+        
         // Start stretching after squeeze has had time to apply
         stretchTimeout = setTimeout(() => {
+          if (!mounted) return
           setAnimationState('stretching')
           
           // After stretch completes, return to normal
-          setTimeout(() => {
+          returnTimeout = setTimeout(() => {
+            if (!mounted) return
             setAnimationState('returning')
             
             // After return completes, go back to idle
-            setTimeout(() => {
+            idleTimeout = setTimeout(() => {
+              if (!mounted) return
               setAnimationState('idle')
-            }, 100) // Match the return transition duration
-          }, 150) // Match the stretch transition duration
-        }, 50) // Give squeeze time to be visible
+            }, 150) // Match the return transition duration
+          }, 220) // Match the stretch transition duration
+        }, 75) // Give squeeze time to be visible
       })
     })
 
     previousSelectedIndexRef.current = selectedIndex
 
     return () => {
-      if (stretchTimeout) {
-        clearTimeout(stretchTimeout)
-      }
+      mounted = false
+      if (rafId1 !== null) cancelAnimationFrame(rafId1)
+      if (rafId2 !== null) cancelAnimationFrame(rafId2)
+      if (stretchTimeout !== null) clearTimeout(stretchTimeout)
+      if (returnTimeout !== null) clearTimeout(returnTimeout)
+      if (idleTimeout !== null) clearTimeout(idleTimeout)
+      // Don't reset state here - let the animation complete or let the new effect handle it
     }
-  }, [selectedIndex, indicatorReady, noTransition])
+  }, [selectedIndex, indicatorReady, noTransition, categories.length])
 
   const mobileButtonLabel = useMemo(() => {
     if (!categories.length) return 'Select'
@@ -356,7 +380,8 @@ export default function Filter({
           className={`filter-slider ${
             animationState === 'squeezing' ? 'animation-squeezing' :
             animationState === 'stretching' ? 'animation-stretching' :
-            animationState === 'returning' ? 'animation-returning' : ''
+            animationState === 'returning' ? 'animation-returning' :
+            animationState === 'idle' ? 'animation-idle' : ''
           }`}
           ref={sliderRef} 
           role="group" 
