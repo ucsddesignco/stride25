@@ -402,7 +402,7 @@ export default function IcebreakerSection() {
       </div>
 
       <h1>Register for Stride!</h1>
-      <Button text='Register now for $6' icon={PriceTag()} className='priceHero' />
+      <Button text='Register now for $6' icon={<PriceTag/>} className='priceHero' link='https://luma.com/voxmkrg3' />
     </section>
   )
 }

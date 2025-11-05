@@ -29,6 +29,7 @@ const Button = ({
           className={`price-button ${className}`}
         >
           {text}
+          {icon && icon}
         </Link>
       ) : (
         <button

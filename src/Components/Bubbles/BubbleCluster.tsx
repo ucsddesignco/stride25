@@ -1,14 +1,20 @@
+import { useState } from 'react';
 import styles from './BubbleCluster.module.css';
 import { AccentBubble } from './AccentBubble';
 import { BubbleCollapsed } from './BubbleCollapsed';
 import { BubbleExpanded } from './BubbleExpanded';
 import { useBubbleCluster } from './useBubbleCluster';
 import type { BubbleClusterProps } from './types';
+import type { BubbleCategory } from './CompanyData';
+import Filter from '../Filter/Filter';
 
 export function BubbleCluster({
   showInstructions = false,
   showResetButton = true,
 }: BubbleClusterProps) {
+  const [selectedCategory, setSelectedCategory] = useState<BubbleCategory>('Recruiting');
+  const categories: BubbleCategory[] = ['Recruiting', 'Networking', 'Student Ambassadors'];
+  
   const {
     containerRef,
     circles,
@@ -18,12 +24,21 @@ export function BubbleCluster({
     handleMouseDown,
     handleMouseUp,
     resetSizes,
-  } = useBubbleCluster();
+  } = useBubbleCluster(selectedCategory);
 
   return (
     <div className={styles.bubbleClusterContainer}>
       {/* Background pattern for depth */}
       <div className={styles.backgroundPattern} />
+
+      {/* Filter component for category selection */}
+      <div className={styles.filterContainer}>
+        <Filter
+          categories={categories}
+          selectedCategory={selectedCategory}
+          onCategoryChange={(category) => setSelectedCategory(category as BubbleCategory)}
+        />
+      </div>
 
       {/* Reset button */}
       {showResetButton && (
@@ -36,7 +51,7 @@ export function BubbleCluster({
       {showInstructions && (
         <div className={styles.instructions}>
           <p>
-            Click any AoPS bubble to expand it! Only one bubble can be expanded
+            Click any bubble to expand it! Only one bubble can be expanded
             at a time, and it will push others away while maintaining the
             cluster's gravitational attraction.
           </p>
@@ -93,9 +108,17 @@ export function BubbleCluster({
               <div className={styles.bubbleContent}>
                 {circle.bubbleType === 'main' ? (
                   circle.isExpanded ? (
-                    <BubbleExpanded description={description} />
+                    <BubbleExpanded 
+                      description={description} 
+                      logo={circle.logo}
+                      name={circle.name}
+                      category={circle.category}
+                    />
                   ) : (
-                    <BubbleCollapsed />
+                    <BubbleCollapsed 
+                      logo={circle.logo}
+                      name={circle.name}
+                    />
                   )
                 ) : (
                   <AccentBubble

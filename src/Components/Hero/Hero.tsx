@@ -22,7 +22,7 @@ export default function Hero() {
       <div className="heroContent">
         <h1>Join Design Co's career fair for UCSD student designers, builders, and problem solvers.</h1>
         <div className='eventsContainer'>
-          <Button text='Register now for $6' icon={PriceTag()} className='priceHero' />
+          <Button text='Register now for $6' icon={<PriceTag/>} className='priceHero' link='https://luma.com/voxmkrg3' />
 
           {/* Add to Calendar */}
           <span className='outer'>

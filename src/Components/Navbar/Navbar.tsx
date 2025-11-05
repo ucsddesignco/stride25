@@ -5,6 +5,7 @@ import Button from '../Button/Button'
 import PriceTag from '../../SVGS/PriceTag'
 
 export default function Navbar() {
+  
   const [isOpen, setIsOpen] = useState(false)
 
   // Close the mobile menu when resizing above the breakpoint
@@ -22,34 +23,34 @@ export default function Navbar() {
     <nav>
       {/* Desktop Nav */}
       <div id="desktop-nav">
-        <span className='strideSpan'>Stride</span>
+        <a href="/" target="_self" className='strideSpan'>Stride</a>
         <ul>
-          <li>Overview</li>
-          <li>Companies</li>
-          <li>Prepare</li>
-          <Button text='Register' className='priceNav' />
+          <li><a href="#overview">Overview</a></li>
+          <li><a href="#bubbles">Companies</a></li>
+          <li><a href="#icebreaker">Prepare</a></li>
+          <Button text='Register' className='priceNav' link='https://luma.com/voxmkrg3' />
         </ul>
       </div>
 
       {/* Mobile Nav */}
       <div id="mobile-nav">
-        <span className='strideSpan'>Stride</span>
+        <a href="/" target="_self" className='strideSpan'>Stride</a>
         <Hamburger toggled={isOpen} toggle={setIsOpen} color="#D3F4FA" />
       </div>
 
       {/* Mobile Dropdown */}
       <div className={`mobile-menu ${isOpen ? 'open' : ''}`}>
         <div className="mobile-menu-header">
-          <span className='strideSpan'>Stride</span>
+          <a href="/" target="_self" className='strideSpan'>Stride</a>
           <Hamburger toggled={isOpen} toggle={setIsOpen} color="#D3F4FA" />
         </div>
         <div className="mobile-menu-content">
           <ul>
-            <li>Overview</li>
-            <li>Companies</li>
-            <li>Prepare</li>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#bubbles">Companies</a></li>
+            <li><a href="#icebreaker">Prepare</a></li>
           </ul>
-          <Button text='Register now for $6' icon={PriceTag()} className='priceHero'/>
+          <Button text='Register now for $6' icon={<PriceTag/>} className='priceHero' link='https://luma.com/voxmkrg3'/>
           </div>
       </div>
     </nav>

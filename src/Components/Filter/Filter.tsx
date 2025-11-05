@@ -281,9 +281,9 @@ export default function Filter({
             // After return completes, go back to idle
             setTimeout(() => {
               setAnimationState('idle')
-            }, 200) // Match the return transition duration
-          }, 300) // Match the stretch transition duration
-        }, 100) // Give squeeze time to be visible
+            }, 100) // Match the return transition duration
+          }, 150) // Match the stretch transition duration
+        }, 50) // Give squeeze time to be visible
       })
     })
 
