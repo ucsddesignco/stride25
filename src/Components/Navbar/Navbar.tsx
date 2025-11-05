@@ -5,7 +5,7 @@ import Button from '../Button/Button'
 import PriceTag from '../../SVGS/PriceTag'
 
 export default function Navbar() {
-  
+
   const [isOpen, setIsOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [isVisible, setIsVisible] = useState(true)
@@ -21,12 +21,12 @@ export default function Navbar() {
     setIsScrolled(initialScrollY > 0)
     setIsVisible(true) // Always visible on initial load
     setScrollDownDistance(0)
-    
+
     // Mark initial mount as complete after a short delay
     const timer = setTimeout(() => {
       isInitialMount.current = false
     }, 100)
-    
+
     return () => clearTimeout(timer)
   }, [])
 
@@ -48,9 +48,9 @@ export default function Navbar() {
         // Scrolling down - accumulate scroll distance
         const distance = currentScrollY - lastScrollY
         const newScrollDownDistance = scrollDownDistance + distance
-        
+
         setScrollDownDistance(newScrollDownDistance)
-        
+
         // Only hide navbar after scrolling down threshold amount
         if (newScrollDownDistance >= SCROLL_THRESHOLD) {
           setIsVisible(false)
@@ -85,15 +85,40 @@ export default function Navbar() {
     return () => window.removeEventListener('resize', handleResize)
   }, [isOpen])
 
+  // Smooth scroll to section without hash in URL
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId)
+    if (element) {
+      const navHeight = 80 // Approximate navbar height, adjust if needed
+      const elementPosition = element.getBoundingClientRect().top
+      const offsetPosition = elementPosition + window.pageYOffset - navHeight
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      })
+
+      // Close mobile menu if open
+      if (isOpen) {
+        setIsOpen(false)
+      }
+    }
+  }
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
+    e.preventDefault()
+    scrollToSection(sectionId)
+  }
+
   return (
     <nav className={`${isScrolled ? 'scrolled' : ''} ${!isVisible ? 'hidden' : ''}`}>
       {/* Desktop Nav */}
       <div id="desktop-nav">
         <a href="/" target="_self" className='strideSpan'>Stride</a>
         <ul>
-          <li><a href="#overview">Overview</a></li>
-          <li><a href="#bubbles">Companies</a></li>
-          <li><a href="#icebreaker">Prepare</a></li>
+          <li><a href="#" onClick={(e) => handleNavClick(e, 'overview')}>Overview</a></li>
+          <li><a href="#" onClick={(e) => handleNavClick(e, 'bubbles')}>Companies</a></li>
+          <li><a href="#" onClick={(e) => handleNavClick(e, 'icebreaker')}>Prepare</a></li>
           <Button text='Register' className='priceNav' link='https://luma.com/voxmkrg3' />
         </ul>
       </div>
@@ -112,12 +137,12 @@ export default function Navbar() {
         </div>
         <div className="mobile-menu-content">
           <ul>
-            <li><a href="#overview">Overview</a></li>
-            <li><a href="#bubbles">Companies</a></li>
-            <li><a href="#icebreaker">Prepare</a></li>
+            <li><a href="#" onClick={(e) => handleNavClick(e, 'overview')}>Overview</a></li>
+            <li><a href="#" onClick={(e) => handleNavClick(e, 'bubbles')}>Companies</a></li>
+            <li><a href="#" onClick={(e) => handleNavClick(e, 'icebreaker')}>Prepare</a></li>
           </ul>
-          <Button text='Register now for $6' icon={<PriceTag/>} className='priceHero' link='https://luma.com/voxmkrg3'/>
-          </div>
+          <Button text='Register now for $6' icon={<PriceTag />} className='priceHero' link='https://luma.com/voxmkrg3' />
+        </div>
       </div>
     </nav>
   );
