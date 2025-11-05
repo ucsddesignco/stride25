@@ -49,25 +49,6 @@ nav {
             position: relative;
             font-weight: 500;
             text-wrap: nowrap;
-
-            &::before {
-              content: '';
-              position: absolute;
-              bottom: -1px;
-              left: 0;
-              width: 100%;
-              height: 1px;
-              background-color: #D3F4FA;
-              transform: translateX(-105%);
-              transition: transform 0.2s ease-in-out;
-            }
-
-            &.active,
-            &:is(:hover, :focus-visible) {
-              &::before {
-                transform: translateX(0);
-              }
-            }
           }
         }
       }
@@ -115,14 +96,14 @@ nav {
       flex-direction: column;
       align-items: flex-start;
       background-color: #031019;
-      padding: 20px 32px;
+      padding: 4px 32px;
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
 
       @media (max-width: 767px) {
-        padding: 20px 20px;
+        padding: 4px 20px;
       }
       // height: 100vh;
       transition: all 0.3s ease-in-out;

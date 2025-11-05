@@ -4,6 +4,7 @@ import Map from '../../SVGS/Map'
 import PriceTag from '../../SVGS/PriceTag'
 import Button from '../Button/Button'
 import HeroBoulder from '../HeroBoulder/HeroBoulder'
+import Star from '../../SVGS/Star'
 
 export default function Hero() {
   const address = "9360 Eucalyptus Grove Ln, La Jolla, CA 92093";
@@ -19,6 +20,33 @@ export default function Hero() {
 
   return (
     <section id="hero">
+
+      <div className="right-stars">
+      <Star className='right1'/>
+      <Star className='right2'/>
+      <Star className='right3'/>
+      </div>
+
+      <div className="top-stars">
+         <Star className='top1'/>
+         <Star className='top2'/>
+      </div>
+
+      <div className="left-stars">
+        <Star className='left1'/>
+        <Star className='left2'/>
+        <Star className='left3'/>
+      </div>
+
+      <div className="bottom-stars">
+        <Star className='bottom1'/>
+        <Star className='bottom2'/>
+        <Star className='bottom3'/>
+        <Star className='bottom4'/> 
+        <Star className='bottom5'/> 
+        <Star className='bottom6'/> 
+      </div>  
+
       <div className="heroContent">
         <h1>Join Design Co's career fair for UCSD student designers, builders, and problem solvers.</h1>
         <div className='eventsContainer'>
