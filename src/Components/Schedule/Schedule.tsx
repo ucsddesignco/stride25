@@ -52,7 +52,7 @@ const Schedule = () => {
                   <span className="bullet">
                     <Diamond />
                   </span>
-                  <p>CheckRx Talk</p>
+                  <p>CheckRx Talk <span className="duration">(15 min)</span></p>
                 </div>
                 <p>11:00 AM</p>
               </div>
@@ -61,7 +61,7 @@ const Schedule = () => {
                   <span className="bullet">
                     <Diamond />
                   </span>
-                  <p>Illumina Talk</p>
+                  <p>Illumina Talk <span className="duration">(15 min)</span></p>
                 </div>
                 <p>12:00 PM</p>
               </div>
@@ -70,7 +70,7 @@ const Schedule = () => {
                   <span className="bullet">
                     <Diamond />
                   </span>
-                  <p>Student Panel</p>
+                  <p>Student Panel <span className="duration">(15 min)</span></p>
                 </div>
                 <p>1:00 PM</p>
               </div>
@@ -133,7 +133,7 @@ const Schedule = () => {
                   <span className="bullet">
                     <Diamond />
                   </span>
-                  <p>CheckRx Talk</p>
+                  <p>CheckRx Talk <span className="duration">(15 min)</span></p>
                 </div>
                 <p>11:00 AM</p>
               </div>
@@ -142,7 +142,7 @@ const Schedule = () => {
                   <span className="bullet">
                     <Diamond />
                   </span>
-                  <p>Illumina Talk</p>
+                  <p>Illumina Talk <span className="duration">(15 min)</span></p>
                 </div>
                 <p>12:00 PM</p>
               </div>
@@ -151,7 +151,7 @@ const Schedule = () => {
                   <span className="bullet">
                     <Diamond />
                   </span>
-                  <p>Student Panel</p>
+                  <p>Student Panel <span className="duration">(15 min)</span></p>
                 </div>
                 <p>1:00 PM</p>
               </div>
