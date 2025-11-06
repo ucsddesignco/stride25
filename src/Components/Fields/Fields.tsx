@@ -8,7 +8,7 @@ const fieldsData = [
   { image: "/images/FieldsSVG/Copywriting.svg", text: "Copywriting" },
   { image: "/images/FieldsSVG/Design Engineering.svg", text: "Design Engineering" },
   { image: "/images/FieldsSVG/UX Research.svg", text: "UX Research" },
-  { image: "/images/FieldsSVG/Software Engineering.svg", text: "Software Engineering" },
+  { image: "/images/FieldsSVG/Software Engineering.svg", text: "Graphic Design" },
 ];
 
 export default function Fields() {
