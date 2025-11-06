@@ -89,19 +89,6 @@ export function BubbleCluster({
               onMouseDown={() => handleMouseDown(circle.id)}
               onMouseUp={() => handleMouseUp(circle.id)}
             >
-              {/* Subtle glow effect */}
-              <div
-                className={styles.glowEffect}
-                style={{
-                  backgroundColor:
-                    circle.bubbleType === 'main'
-                      ? circle.isExpanded
-                        ? '#1C415A'
-                        : '#1E7083'
-                      : circle.accentColor,
-                }}
-              />
-
               {/* Main bubble with SVG content */}
               <div className={styles.bubbleContent}>
                 {circle.bubbleType === 'main' ? (
