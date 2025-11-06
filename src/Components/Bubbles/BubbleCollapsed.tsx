@@ -29,6 +29,9 @@ export function BubbleCollapsed({ logo, name }: BubbleCollapsedProps) {
   
   // If logo exists, render SVG image
   if (logo) {
+    // Nudge certain logos for better optical centering in the small bubble
+    const xOffset = 10;
+    const yOffset = logo.includes('alantran.svg') ? 14 : 10;
     return (
       <svg className={styles.svgContainer} fill="none" preserveAspectRatio="none" viewBox="0 0 100 100">
         <defs>
@@ -37,8 +40,8 @@ export function BubbleCollapsed({ logo, name }: BubbleCollapsedProps) {
         <rect fill={`url(#${gradientId})`} height="100" rx="50" width="100" x="0" y="0" />
         <image
           href={logo}
-          x="10"
-          y="10"
+          x={xOffset}
+          y={yOffset}
           width="80"
           height="80"
           preserveAspectRatio="xMidYMid meet"

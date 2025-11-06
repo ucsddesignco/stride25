@@ -10,6 +10,7 @@ export function useBubbleCluster(category: BubbleCategory = 'Recruiting', _props
   const [isFadingIn, setIsFadingIn] = useState(false);
   const previousCategoryRef = useRef<BubbleCategory | null>(null);
   const regenerationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hasInitializedRef = useRef<boolean>(false);
 
   useEffect(() => {
     const updateSize = () => {
@@ -23,104 +24,103 @@ export function useBubbleCluster(category: BubbleCategory = 'Recruiting', _props
     return () => window.removeEventListener('resize', updateSize);
   }, []);
 
-  useEffect(() => {
-    if (containerSize.width === 0 || containerSize.height === 0) return;
-    
-    const isCategoryChange = previousCategoryRef.current !== null && previousCategoryRef.current !== category;
-    previousCategoryRef.current = category;
-    
-    const generateCircles = () => {
-      const margin = 20;
+  // Helper to generate circles using the current container size and selected category
+  const generateCircles = () => {
+    const margin = 20;
 
-      // Get companies for the selected category
-      const companies = CompanyData[category];
-      const mainBubbles: Circle[] = companies.map((company) => ({
-        id: company.id,
-        x: Math.random() * (containerSize.width - 150 - margin * 2) + 75 + margin,
-        y: Math.random() * (containerSize.height - 150 - margin * 2) + 75 + margin,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
-        size: 100,
-        targetSize: 100,
+    const companies = CompanyData[category];
+    const mainBubbles: Circle[] = companies.map((company) => ({
+      id: company.id,
+      x: Math.random() * (containerSize.width - 150 - margin * 2) + 75 + margin,
+      y: Math.random() * (containerSize.height - 150 - margin * 2) + 75 + margin,
+      vx: (Math.random() - 0.5) * 0.5,
+      vy: (Math.random() - 0.5) * 0.5,
+      size: 100,
+      targetSize: 100,
+      isExpanded: false,
+      isInteractable: true,
+      bubbleType: 'main',
+      isHovered: false,
+      isPressed: false,
+      description: company.description,
+      logo: company.logo,
+      name: company.name,
+      category: company.category,
+      link: company.link,
+    }));
+
+    const accentSizes = [30, 35, 50, 40, 25, 45, 28, 42, 32, 38, 27, 48];
+    const accentColors = ['#A8EAFC', '#DCF7FF'];
+
+    const accentBubbles: Circle[] = Array.from({ length: 12 }, (_, i) => {
+      const size = accentSizes[i] / 2;
+      return {
+        id: i + 100,
+        x: Math.random() * (containerSize.width - size - margin * 2) + size / 2 + margin,
+        y: Math.random() * (containerSize.height - size - margin * 2) + size / 2 + margin,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        size,
+        targetSize: size,
         isExpanded: false,
-        isInteractable: true,
-        bubbleType: 'main',
+        isInteractable: false,
+        bubbleType: 'accent',
+        accentColor: accentColors[i % accentColors.length],
         isHovered: false,
         isPressed: false,
-        description: company.description,
-        logo: company.logo,
-        name: company.name,
-        category: company.category,
-        link: company.link,
-      }));
+      } as Circle;
+    });
 
-      const accentSizes = [30, 35, 50, 40, 25, 45, 28, 42, 32, 38, 27, 48];
-      const accentColors = ['#A8EAFC', '#DCF7FF'];
+    setCircles([...mainBubbles, ...accentBubbles]);
+  };
 
-      const accentBubbles: Circle[] = Array.from({ length: 12 }, (_, i) => {
-        const size = accentSizes[i];
-        return {
-          id: i + 100,
-          x: Math.random() * (containerSize.width - size - margin * 2) + size / 2 + margin,
-          y: Math.random() * (containerSize.height - size - margin * 2) + size / 2 + margin,
-          vx: (Math.random() - 0.5) * 0.3,
-          vy: (Math.random() - 0.5) * 0.3,
-          size,
-          targetSize: size,
-          isExpanded: false,
-          isInteractable: false,
-          bubbleType: 'accent',
-          accentColor: accentColors[i % accentColors.length],
-          isHovered: false,
-          isPressed: false,
-        } as Circle;
-      });
+  // Initialize once when size is known; do not regenerate on viewport resize
+  useEffect(() => {
+    if (hasInitializedRef.current) return;
+    if (containerSize.width === 0 || containerSize.height === 0) return;
 
-      setCircles([...mainBubbles, ...accentBubbles]);
-    };
-    
-    if (isCategoryChange) {
-      // Clear any pending regeneration
-      if (regenerationTimeoutRef.current) {
-        clearTimeout(regenerationTimeoutRef.current);
-      }
-      
-      // Use startTransition to mark this as a non-urgent update
-      // This allows the filter animation to run smoothly without being blocked
-      startTransition(() => {
-        // Don't clear circles immediately - keep them visible during animation
-        // Regenerate after animation completes
-        regenerationTimeoutRef.current = setTimeout(() => {
-          startTransition(() => {
-            setCircles([]);
-            // Generate new circles in the next frame with fade-in
-            requestAnimationFrame(() => {
-              setIsFadingIn(true);
-              generateCircles();
-              // Remove fade-in class after animation completes
-              setTimeout(() => {
-                setIsFadingIn(false);
-              }, 400);
-            });
-          });
-        }, 200); // Wait for animation to complete (150ms transition + 50ms buffer)
-      });
-    } else {
-      // On initial mount or container resize, generate immediately with fade-in
-      setIsFadingIn(true);
-      generateCircles();
-      setTimeout(() => {
-        setIsFadingIn(false);
-      }, 400);
+    setIsFadingIn(true);
+    generateCircles();
+    setTimeout(() => {
+      setIsFadingIn(false);
+    }, 400);
+    hasInitializedRef.current = true;
+    previousCategoryRef.current = category;
+  }, [containerSize]);
+
+  // Regenerate only on category change (not on viewport resize)
+  useEffect(() => {
+    if (!hasInitializedRef.current) return;
+    const isCategoryChange = previousCategoryRef.current !== null && previousCategoryRef.current !== category;
+    if (!isCategoryChange) return;
+    previousCategoryRef.current = category;
+
+    if (regenerationTimeoutRef.current) {
+      clearTimeout(regenerationTimeoutRef.current);
     }
-    
+
+    startTransition(() => {
+      regenerationTimeoutRef.current = setTimeout(() => {
+        startTransition(() => {
+          setCircles([]);
+          requestAnimationFrame(() => {
+            setIsFadingIn(true);
+            generateCircles();
+            setTimeout(() => {
+              setIsFadingIn(false);
+            }, 400);
+          });
+        });
+      }, 200);
+    });
+
     return () => {
       if (regenerationTimeoutRef.current) {
         clearTimeout(regenerationTimeoutRef.current);
         regenerationTimeoutRef.current = null;
       }
     };
-  }, [containerSize, category]);
+  }, [category]);
 
   useEffect(() => {
     if (circles.length === 0) return;
@@ -129,6 +129,18 @@ export function useBubbleCluster(category: BubbleCategory = 'Recruiting', _props
       setCircles((prevCircles) => {
         const centerX = containerSize.width / 2;
         const centerY = containerSize.height / 2;
+
+        // Define a centered target rectangle with 2h:1w aspect ratio
+        const targetAspectHtoW = 2; // height:width
+        const padding = 40;
+        const maxWidth = Math.max(0, containerSize.width - padding * 2);
+        const maxHeight = Math.max(0, containerSize.height - padding * 2);
+        const rectWidth = Math.min(maxWidth, maxHeight / targetAspectHtoW);
+        const rectHeight = rectWidth * targetAspectHtoW;
+        const rectLeft = centerX - rectWidth / 2;
+        const rectRight = centerX + rectWidth / 2;
+        const rectTop = centerY - rectHeight / 2;
+        const rectBottom = centerY + rectHeight / 2;
 
         return prevCircles.map((circle) => {
           let newVx = circle.vx;
@@ -149,25 +161,34 @@ export function useBubbleCluster(category: BubbleCategory = 'Recruiting', _props
               newVy *= 0.8;
             }
           } else {
+            // Anisotropic gravity favoring vertical spread to encourage 2h:1w occupancy
             const distToCenterX = centerX - circle.x;
             const distToCenterY = centerY - circle.y;
-            const distToCenter = Math.sqrt(distToCenterX * distToCenterX + distToCenterY * distToCenterY);
-            if (distToCenter > 0) {
-              const gravityStrength = 0.0005;
-              newVx += (distToCenterX / distToCenter) * gravityStrength * distToCenter;
-              newVy += (distToCenterY / distToCenter) * gravityStrength * distToCenter;
-            }
+            const gravityStrengthX = 0.00035;
+            const gravityStrengthY = 0.0007;
+            newVx += distToCenterX * gravityStrengthX;
+            newVy += distToCenterY * gravityStrengthY;
+
+            // Rectangular shaping force: gently pull bubbles back inside the target rectangle
+            const clampedX = Math.max(rectLeft, Math.min(circle.x, rectRight));
+            const clampedY = Math.max(rectTop, Math.min(circle.y, rectBottom));
+            const dxToRect = clampedX - circle.x;
+            const dyToRect = clampedY - circle.y;
+            const shapeStrength = 0.002;
+            newVx += dxToRect * shapeStrength;
+            newVy += dyToRect * shapeStrength;
           }
 
           if (!circle.isExpanded) {
+            const separationBuffer = 12; // extra gap to ensure borders never touch
             prevCircles.forEach((other) => {
               if (other.id === circle.id) return;
               const dx = circle.x - other.x;
               const dy = circle.y - other.y;
               const distance = Math.sqrt(dx * dx + dy * dy);
-              const minDistance = (circle.size + other.size) / 2 + 20;
+              const minDistance = (circle.size + other.size) / 2 + separationBuffer;
               if (distance < minDistance && distance > 0) {
-                const repulsionStrength = 0.06;
+                const repulsionStrength = 0.1;
                 const force = (minDistance - distance) * repulsionStrength;
                 newVx += (dx / distance) * force;
                 newVy += (dy / distance) * force;
@@ -181,26 +202,25 @@ export function useBubbleCluster(category: BubbleCategory = 'Recruiting', _props
           let newX = circle.x + newVx;
           let newY = circle.y + newVy;
 
-          // Only apply boundary constraints to non-expanded bubbles
-          // Expanded bubbles should be allowed to extend beyond container edges
-          if (!circle.isExpanded) {
-            const radius = circle.size / 2;
-            const margin = 20;
-            if (newX - radius < margin) {
-              newX = radius + margin;
-              newVx = Math.abs(newVx) * 0.4;
-            } else if (newX + radius > containerSize.width - margin) {
-              newX = containerSize.width - radius - margin;
-              newVx = -Math.abs(newVx) * 0.4;
-            }
+          // Remove container-edge collision: allow bubbles to move beyond the container
 
-            if (newY - radius < margin) {
-              newY = radius + margin;
-              newVy = Math.abs(newVy) * 0.4;
-            } else if (newY + radius > containerSize.height - margin) {
-              newY = containerSize.height - radius - margin;
-              newVy = -Math.abs(newVy) * 0.4;
-            }
+          // Positional correction to resolve any remaining overlaps after movement
+          if (!circle.isExpanded) {
+            const separationBuffer = 12;
+            prevCircles.forEach((other) => {
+              if (other.id === circle.id) return;
+              const dx = newX - other.x;
+              const dy = newY - other.y;
+              const distance = Math.sqrt(dx * dx + dy * dy);
+              const minDistance = (circle.size + other.size) / 2 + separationBuffer;
+              if (distance > 0 && distance < minDistance) {
+                const overlap = (minDistance - distance) * 0.5;
+                const nx = dx / distance;
+                const ny = dy / distance;
+                newX += nx * overlap;
+                newY += ny * overlap;
+              }
+            });
           }
 
           let newSize = circle.size;
@@ -229,8 +249,7 @@ export function useBubbleCluster(category: BubbleCategory = 'Recruiting', _props
       const willExpand = !clickedCircle.isExpanded;
       const centerX = containerSize.width / 2;
       const centerY = containerSize.height / 2;
-      const isMobile = window.innerWidth < 768;
-      const expandedSize = isMobile ? 270 : 360;
+      const expandedSize = 440;
 
       return prevCircles.map((circle) => {
         if (circle.id === clickedId) {

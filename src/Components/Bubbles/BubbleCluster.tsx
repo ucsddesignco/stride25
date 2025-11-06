@@ -60,19 +60,16 @@ export function BubbleCluster({
       <div ref={containerRef} className={styles.circlesContainer}>
         {circles.map((circle) => {
           const description = circle.bubbleType === 'main' ? circle.description ?? '' : '';
-          const scale = circle.isInteractable
-            ? circle.isPressed
-              ? 0.95
-              : circle.isHovered
-                ? 1.05
-                : 1
+          const isExpandedMain = circle.bubbleType === 'main' && circle.isExpanded;
+          const scale = circle.isInteractable && !isExpandedMain
+            ? (circle.isPressed ? 0.95 : (circle.isHovered ? 1.05 : 1))
             : 1;
 
           return (
             <div
               key={circle.id}
               className={`${styles.bubble} ${
-                circle.isInteractable
+                circle.isInteractable && !(circle.bubbleType === 'main' && circle.isExpanded)
                   ? styles.interactable
                   : styles.nonInteractable
               } ${circle.bubbleType === 'main' && circle.isExpanded ? styles.expanded : ''} ${isFadingIn ? styles.fadeIn : ''}`}
@@ -83,7 +80,11 @@ export function BubbleCluster({
                 height: circle.size,
                 transform: `scale(${scale})`,
               }}
-              onClick={(event) => handleCircleClick(circle.id, event)}
+              onClick={(event) => {
+                // Prevent closing by clicking the bubble content when expanded; must use close button
+                if (circle.bubbleType === 'main' && circle.isExpanded) return;
+                handleCircleClick(circle.id, event);
+              }}
               onMouseEnter={() => handleMouseEnter(circle.id)}
               onMouseLeave={() => handleMouseLeave(circle.id)}
               onMouseDown={() => handleMouseDown(circle.id)}
@@ -120,8 +121,7 @@ export function BubbleCluster({
                   className={styles.closeButton} 
                   onClick={(e) => {
                     e.stopPropagation();
-                    const event = { preventDefault: () => {} } as React.MouseEvent;
-                    handleCircleClick(circle.id, event);
+                    handleCircleClick(circle.id, e);
                   }}
                   aria-label="Close"
                 >
