@@ -6,9 +6,10 @@ interface BubbleExpandedProps {
   logo?: string;
   name?: string;
   category?: string;
+  link?: string;
 }
 
-export function BubbleExpanded({ description, logo, name, category }: BubbleExpandedProps) {
+export function BubbleExpanded({ description, logo, name, category, link }: BubbleExpandedProps) {
   return (
     <div className={styles.expandedBubble}>
       <div className={`${styles.logoContainer} ${styles.fadeInContent}`}>
@@ -35,7 +36,11 @@ export function BubbleExpanded({ description, logo, name, category }: BubbleExpa
             const mainText = parenMatch ? parenMatch[1].trim() : name;
             const subtitleText = parenMatch ? parenMatch[2].trim() : null;
             const mainWords = mainText.split(' ');
-            const subtitleFontSize = 14;
+            const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+            const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 1024;
+            const mainFontSize = isMobile ? 18 : isDesktop ? 18 : 20;
+            const subtitleFontSize = isMobile ? 12 : 14;
+            const lineSpacing = isMobile ? 14 : 16;
             
             return (
               <svg className={styles.logoSvg} fill="none" preserveAspectRatio="none" viewBox="0 0 100 100">
@@ -47,19 +52,19 @@ export function BubbleExpanded({ description, logo, name, category }: BubbleExpa
                     textAnchor="middle"
                     dominantBaseline="middle"
                     fill="#D3F4FA"
-                    fontSize="20"
+                    fontSize={mainFontSize}
                     fontWeight="700"
                     fontFamily="Bricolage Grotesque, sans-serif"
                     className={styles.expandedHeading}
                   >
                     {mainWords.map((word, i) => (
-                      <tspan key={i} x="50" dy={i === 0 ? 0 : 16}>
+                      <tspan key={i} x="50" dy={i === 0 ? 0 : lineSpacing}>
                         {word}
                       </tspan>
                     ))}
                     {subtitleText && (
                       <>
-                        <tspan x="50" dy={mainWords.length > 1 ? 6 : 10} fontSize={subtitleFontSize} fontWeight="400">
+                        <tspan x="50" dy={mainWords.length > 1 ? (isMobile ? 4 : 6) : (isMobile ? 8 : 10)} fontSize={subtitleFontSize} fontWeight="400">
                           ({subtitleText})
                         </tspan>
                       </>
@@ -90,6 +95,22 @@ export function BubbleExpanded({ description, logo, name, category }: BubbleExpa
       <div className={`${styles.textContent} ${styles.fadeInContent}`}>
         {description}
       </div>
+      {link && (
+        <a 
+          href={link} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className={`${styles.learnMoreButton} ${styles.fadeInContent}`}
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
+          Learn More
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 4L4 12M4 4H12V12" stroke="#09456F" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </a>
+      )}
     </div>
   );
 }

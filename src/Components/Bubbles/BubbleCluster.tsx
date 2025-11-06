@@ -23,7 +23,7 @@ export function BubbleCluster({
     handleMouseLeave,
     handleMouseDown,
     handleMouseUp,
-    resetSizes,
+    isFadingIn,
   } = useBubbleCluster(selectedCategory);
 
   return (
@@ -39,13 +39,6 @@ export function BubbleCluster({
           onCategoryChange={(category) => setSelectedCategory(category as BubbleCategory)}
         />
       </div>
-
-      {/* Reset button */}
-      {showResetButton && (
-        <button onClick={resetSizes} className={styles.resetButton}>
-          Reset Sizes
-        </button>
-      )}
 
       {/* Instructions */}
       {showInstructions && (
@@ -77,7 +70,7 @@ export function BubbleCluster({
                 circle.isInteractable
                   ? styles.interactable
                   : styles.nonInteractable
-              }`}
+              } ${circle.bubbleType === 'main' && circle.isExpanded ? styles.expanded : ''} ${isFadingIn ? styles.fadeIn : ''}`}
               style={{
                 left: circle.x - circle.size / 2,
                 top: circle.y - circle.size / 2,
@@ -113,6 +106,7 @@ export function BubbleCluster({
                       logo={circle.logo}
                       name={circle.name}
                       category={circle.category}
+                      link={circle.link}
                     />
                   ) : (
                     <BubbleCollapsed 
@@ -127,6 +121,24 @@ export function BubbleCluster({
                   />
                 )}
               </div>
+              
+              {/* Close button for expanded bubbles - outside bubbleContent to avoid overflow clipping */}
+              {circle.bubbleType === 'main' && circle.isExpanded && (
+                <button 
+                  className={styles.closeButton} 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const event = { preventDefault: () => {} } as React.MouseEvent;
+                    handleCircleClick(circle.id, event);
+                  }}
+                  aria-label="Close"
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="12" fill="#D3F4FA"/>
+                    <path d="M8 8L16 16M16 8L8 16" stroke="#1C415A" strokeWidth="1.5" strokeLinecap="round"/>
+                  </svg>
+                </button>
+              )}
             </div>
           );
         })}

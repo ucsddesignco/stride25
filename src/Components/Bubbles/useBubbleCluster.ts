@@ -7,6 +7,7 @@ export function useBubbleCluster(category: BubbleCategory = 'Recruiting', _props
   const animationRef = useRef<number>(0);
   const [circles, setCircles] = useState<Circle[]>([]);
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
+  const [isFadingIn, setIsFadingIn] = useState(false);
   const previousCategoryRef = useRef<BubbleCategory | null>(null);
   const regenerationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -50,6 +51,7 @@ export function useBubbleCluster(category: BubbleCategory = 'Recruiting', _props
         logo: company.logo,
         name: company.name,
         category: company.category,
+        link: company.link,
       }));
 
       const accentSizes = [30, 35, 50, 40, 25, 45, 28, 42, 32, 38, 27, 48];
@@ -91,16 +93,25 @@ export function useBubbleCluster(category: BubbleCategory = 'Recruiting', _props
         regenerationTimeoutRef.current = setTimeout(() => {
           startTransition(() => {
             setCircles([]);
-            // Generate new circles in the next frame
+            // Generate new circles in the next frame with fade-in
             requestAnimationFrame(() => {
+              setIsFadingIn(true);
               generateCircles();
+              // Remove fade-in class after animation completes
+              setTimeout(() => {
+                setIsFadingIn(false);
+              }, 400);
             });
           });
         }, 200); // Wait for animation to complete (150ms transition + 50ms buffer)
       });
     } else {
-      // On initial mount or container resize, generate immediately
+      // On initial mount or container resize, generate immediately with fade-in
+      setIsFadingIn(true);
       generateCircles();
+      setTimeout(() => {
+        setIsFadingIn(false);
+      }, 400);
     }
     
     return () => {
@@ -170,22 +181,26 @@ export function useBubbleCluster(category: BubbleCategory = 'Recruiting', _props
           let newX = circle.x + newVx;
           let newY = circle.y + newVy;
 
-          const radius = circle.size / 2;
-          const margin = 20;
-          if (newX - radius < margin) {
-            newX = radius + margin;
-            newVx = Math.abs(newVx) * 0.4;
-          } else if (newX + radius > containerSize.width - margin) {
-            newX = containerSize.width - radius - margin;
-            newVx = -Math.abs(newVx) * 0.4;
-          }
+          // Only apply boundary constraints to non-expanded bubbles
+          // Expanded bubbles should be allowed to extend beyond container edges
+          if (!circle.isExpanded) {
+            const radius = circle.size / 2;
+            const margin = 20;
+            if (newX - radius < margin) {
+              newX = radius + margin;
+              newVx = Math.abs(newVx) * 0.4;
+            } else if (newX + radius > containerSize.width - margin) {
+              newX = containerSize.width - radius - margin;
+              newVx = -Math.abs(newVx) * 0.4;
+            }
 
-          if (newY - radius < margin) {
-            newY = radius + margin;
-            newVy = Math.abs(newVy) * 0.4;
-          } else if (newY + radius > containerSize.height - margin) {
-            newY = containerSize.height - radius - margin;
-            newVy = -Math.abs(newVy) * 0.4;
+            if (newY - radius < margin) {
+              newY = radius + margin;
+              newVy = Math.abs(newVy) * 0.4;
+            } else if (newY + radius > containerSize.height - margin) {
+              newY = containerSize.height - radius - margin;
+              newVy = -Math.abs(newVy) * 0.4;
+            }
           }
 
           let newSize = circle.size;
@@ -302,6 +317,7 @@ export function useBubbleCluster(category: BubbleCategory = 'Recruiting', _props
     handleMouseDown,
     handleMouseUp,
     resetSizes,
+    isFadingIn,
   } as const;
 }
 
