@@ -7,6 +7,7 @@ import { useBubbleCluster } from './useBubbleCluster';
 import type { BubbleClusterProps } from './types';
 import type { BubbleCategory } from './CompanyData';
 import Filter from '../Filter/Filter';
+import BubblesBackground from './BubblesBackground';
 
 export function BubbleCluster({
   showInstructions = false,
@@ -27,6 +28,11 @@ export function BubbleCluster({
 
   return (
     <div className={styles.bubbleClusterContainer}>
+      {/* SVG background */}
+      <div className={styles.svgBackground}>
+        <BubblesBackground />
+      </div>
+      
       {/* Background pattern for depth */}
       <div className={styles.backgroundPattern} />
 
@@ -83,19 +89,6 @@ export function BubbleCluster({
               onMouseDown={() => handleMouseDown(circle.id)}
               onMouseUp={() => handleMouseUp(circle.id)}
             >
-              {/* Subtle glow effect */}
-              <div
-                className={styles.glowEffect}
-                style={{
-                  backgroundColor:
-                    circle.bubbleType === 'main'
-                      ? circle.isExpanded
-                        ? '#1C415A'
-                        : '#1E7083'
-                      : circle.accentColor,
-                }}
-              />
-
               {/* Main bubble with SVG content */}
               <div className={styles.bubbleContent}>
                 {circle.bubbleType === 'main' ? (
