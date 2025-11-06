@@ -26,10 +26,7 @@ export default function overview() {
       <div className="header">
         <h2>Gain insight and connect with professionals.</h2>
         <p>
-          STRIDE is Design Co’s uniquely design-forward career fair. Held once a
-          year, STRIDE connects students with company representatives for a day
-          of networking, resume reviews, and recruiting sessions designed to
-          jump-start industry careers.
+          Held once a year, Stride connects students with company representatives for a day of networking, resume reviews, and recruiting sessions designed to jump-start industry careers.
         </p>
       </div>
       <div className="boxes-general">
