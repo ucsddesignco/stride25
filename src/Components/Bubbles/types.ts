@@ -23,7 +23,6 @@ export interface Circle {
 
 export interface BubbleClusterProps {
   showInstructions?: boolean;
-  showResetButton?: boolean;
 }
 
 

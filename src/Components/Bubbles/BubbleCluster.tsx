@@ -10,7 +10,6 @@ import Filter from '../Filter/Filter';
 
 export function BubbleCluster({
   showInstructions = false,
-  showResetButton = true,
 }: BubbleClusterProps) {
   const [selectedCategory, setSelectedCategory] = useState<BubbleCategory>('Recruiting');
   const categories: BubbleCategory[] = useMemo(() => ['Recruiting', 'Networking', 'Student Ambassadors'], []);
