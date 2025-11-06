@@ -7,6 +7,7 @@ import { useBubbleCluster } from './useBubbleCluster';
 import type { BubbleClusterProps } from './types';
 import type { BubbleCategory } from './CompanyData';
 import Filter from '../Filter/Filter';
+import BubblesBackground from './BubblesBackground';
 
 export function BubbleCluster({
   showInstructions = false,
@@ -27,6 +28,11 @@ export function BubbleCluster({
 
   return (
     <div className={styles.bubbleClusterContainer}>
+      {/* SVG background */}
+      <div className={styles.svgBackground}>
+        <BubblesBackground />
+      </div>
+      
       {/* Background pattern for depth */}
       <div className={styles.backgroundPattern} />
 
