@@ -65,11 +65,14 @@
   justify-content: center;
   gap: 1rem;
   flex-direction: column;
+  padding-bottom: 0.8rem;
 
   .box__icon{
     &:hover {
       animation: wiggle 0.4s ease-out forwards;
     }
+
+    padding-top: 1.8rem;
 
     @keyframes wiggle {
       33% {
@@ -86,8 +89,6 @@
   }
 
 
-
-
   @media (min-width: 768px) {
     min-height: 200px;
   }
@@ -96,3 +97,5 @@
     min-height: 220px;
   }
 }
+
+
