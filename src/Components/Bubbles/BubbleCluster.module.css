@@ -120,6 +120,7 @@
   will-change: transform;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  pointer-events: none;
 }
 
 .svgContainer image {

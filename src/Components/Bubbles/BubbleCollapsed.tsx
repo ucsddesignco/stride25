@@ -44,18 +44,19 @@ export function BubbleCollapsed({ logo, name }: BubbleCollapsedProps) {
     if (inlineSvgContent) {
       const scale = logoSize / 100;
       return (
-        <svg className={styles.svgContainer} fill="none" preserveAspectRatio="none" viewBox="0 0 100 100">
+        <svg className={styles.svgContainer} fill="none" preserveAspectRatio="none" viewBox="0 0 100 100" style={{ pointerEvents: 'none' }}>
           <defs>
             {gradientDef}
           </defs>
           <rect fill={`url(#${gradientId})`} height="100" rx="50" width="100" x="0" y="0" />
-          <g transform={`translate(${logoXOffset}, ${logoYOffset}) scale(${scale})`}>
+          <g transform={`translate(${logoXOffset}, ${logoYOffset}) scale(${scale})`} style={{ pointerEvents: 'none' }}>
             <svg
               width="100"
               height="100"
               viewBox={inlineSvgContent.viewBox}
               preserveAspectRatio="xMidYMid meet"
               xmlns="http://www.w3.org/2000/svg"
+              style={{ pointerEvents: 'none' }}
               dangerouslySetInnerHTML={{ __html: inlineSvgContent.content }}
             />
           </g>
@@ -65,7 +66,7 @@ export function BubbleCollapsed({ logo, name }: BubbleCollapsedProps) {
     
     // Fallback to image tag while loading
     return (
-      <svg className={styles.svgContainer} fill="none" preserveAspectRatio="none" viewBox="0 0 100 100">
+      <svg className={styles.svgContainer} fill="none" preserveAspectRatio="none" viewBox="0 0 100 100" style={{ pointerEvents: 'none' }}>
         <defs>
           {gradientDef}
         </defs>
@@ -80,6 +81,7 @@ export function BubbleCollapsed({ logo, name }: BubbleCollapsedProps) {
           style={{
             imageRendering: 'auto',
             shapeRendering: 'geometricPrecision',
+            pointerEvents: 'none',
           }}
         />
       </svg>
@@ -107,7 +109,7 @@ export function BubbleCollapsed({ logo, name }: BubbleCollapsedProps) {
       const startY = 50 - (totalTextHeight / 2);
       
       return (
-        <svg className={styles.svgContainer} fill="none" preserveAspectRatio="none" viewBox="0 0 100 100">
+        <svg className={styles.svgContainer} fill="none" preserveAspectRatio="none" viewBox="0 0 100 100" style={{ pointerEvents: 'none' }}>
           <defs>
             {gradientDef}
           </defs>
@@ -122,9 +124,10 @@ export function BubbleCollapsed({ logo, name }: BubbleCollapsedProps) {
             fontWeight="700"
             fontFamily="system-ui, -apple-system, sans-serif"
             className={styles.logoText}
+            style={{ pointerEvents: 'none' }}
           >
             {mainWords.map((word, i) => (
-              <tspan key={i} x="50" dy={i === 0 ? 0 : lineHeight} textAnchor="middle">
+              <tspan key={i} x="50" dy={i === 0 ? 0 : lineHeight} textAnchor="middle" style={{ pointerEvents: 'none' }}>
                 {word}
               </tspan>
             ))}
@@ -135,7 +138,7 @@ export function BubbleCollapsed({ logo, name }: BubbleCollapsedProps) {
               textAnchor="middle"
               fontSize={subtitleFontSize}
               fontWeight="400"
-              style={{ wordSpacing: 'normal' }}
+              style={{ wordSpacing: 'normal', pointerEvents: 'none' }}
             >
               ({subtitleText})
             </tspan>
@@ -152,7 +155,7 @@ export function BubbleCollapsed({ logo, name }: BubbleCollapsedProps) {
     const startY = 50 - (totalTextHeight / 2);
     
     return (
-      <svg className={styles.svgContainer} fill="none" preserveAspectRatio="none" viewBox="0 0 100 100">
+      <svg className={styles.svgContainer} fill="none" preserveAspectRatio="none" viewBox="0 0 100 100" style={{ pointerEvents: 'none' }}>
         <defs>
           {gradientDef}
         </defs>
@@ -167,9 +170,10 @@ export function BubbleCollapsed({ logo, name }: BubbleCollapsedProps) {
           fontWeight="700"
           fontFamily="system-ui, -apple-system, sans-serif"
           className={styles.logoText}
+          style={{ pointerEvents: 'none' }}
         >
           {words.map((word, i) => (
-            <tspan key={i} x="50" dy={i === 0 ? 0 : lineHeight} textAnchor="middle">
+            <tspan key={i} x="50" dy={i === 0 ? 0 : lineHeight} textAnchor="middle" style={{ pointerEvents: 'none' }}>
               {word}
             </tspan>
           ))}
@@ -180,12 +184,12 @@ export function BubbleCollapsed({ logo, name }: BubbleCollapsedProps) {
 
   // Fallback to AoPS logo if no logo or name
   return (
-    <svg className={styles.svgContainer} fill="none" preserveAspectRatio="none" viewBox="0 0 100 100">
+    <svg className={styles.svgContainer} fill="none" preserveAspectRatio="none" viewBox="0 0 100 100" style={{ pointerEvents: 'none' }}>
       <defs>
         {gradientDef}
       </defs>
       <rect fill={`url(#${gradientId})`} height="100" rx="50" width="100" x="0" y="0" />
-      <g>
+      <g style={{ pointerEvents: 'none' }}>
         <AoPSLogoPaths />
       </g>
     </svg>

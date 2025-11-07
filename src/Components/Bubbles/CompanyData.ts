@@ -110,13 +110,5 @@ export const CompanyData: Record<BubbleCategory, Company[]> = {
       category: 'Student Ambassadors',
       link: 'https://www.anthropic.com/careers',
     },
-    {
-      id: 14,
-      name: 'Autodesk',
-      logo: undefined, // No logo file, will render as text
-      description: 'Autodesk is a software company dedicated to empowering innovators in architecture, engineering, and manufacturing. They focus on developing design tools and cultivating technical expertise, offering a range of software access and educational programs. They offer Autodesk Inventor, Fusion 360, and more.',
-      category: 'Student Ambassadors',
-      link: 'https://www.autodesk.com/careers',
-  },
   ],
 };
