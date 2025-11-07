@@ -79,7 +79,7 @@ export const CompanyData: Record<BubbleCategory, Company[]> = {
     {
       id: 10,
       name: 'Illumina (Alan Tran)',
-      logo: undefined, // No logo file, will render as text
+      logo: '/images/Bubbles/Networking/alantran.svg',
       description: 'Alan Tran is a UX Engineer at Illumina dedicated to delivering a consistent design framework for complex medical platforms. Since 2021, he\'s helped brainstorm efficient technical solutions in collaboration with interaction and visual design.',
       category: 'Networking',
       link: 'https://www.linkedin.com/in/alantran2/',
