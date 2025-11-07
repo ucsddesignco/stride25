@@ -115,6 +115,17 @@
   display: block;
   width: 100%;
   height: 100%;
+  shape-rendering: geometricPrecision;
+  transform: translateZ(0);
+  will-change: transform;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.svgContainer image {
+  image-rendering: auto;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
 }
 
 .expandedBubble {
@@ -201,6 +212,17 @@
   display: block;
   width: 9rem;
   height: 9rem;
+  shape-rendering: geometricPrecision;
+  transform: translateZ(0);
+  will-change: transform;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.logoSvg image {
+  image-rendering: auto;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
 }
 
 .textContent {

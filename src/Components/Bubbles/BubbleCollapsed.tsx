@@ -1,6 +1,7 @@
 import { useMemo, useId } from 'react';
 import styles from './BubbleCluster.module.css';
 import { AoPSLogoPaths } from './AoPSLogoPaths';
+import { useInlineSVG } from './useInlineSVG';
 
 interface BubbleCollapsedProps {
   logo?: string;
@@ -18,6 +19,9 @@ export function BubbleCollapsed({ logo, name }: BubbleCollapsedProps) {
     return `bubble-gradient-${baseId}-${safeInstanceId}`;
   }, [logo, name, instanceId]);
   
+  // Load SVG content inline for crisp rendering
+  const inlineSvgContent = useInlineSVG(logo);
+  
   // Gradient definition: 12% opacity at top, 100% opacity at bottom (matches expanded bubble)
   // Gradient goes from top (y1=0%) to bottom (y2=100%)
   const gradientDef = (
@@ -29,9 +33,37 @@ export function BubbleCollapsed({ logo, name }: BubbleCollapsedProps) {
   
   // If logo exists, render SVG image
   if (logo) {
-    // Nudge certain logos for better optical centering in the small bubble
-    const xOffset = 10;
-    const yOffset = logo.includes('alantran.svg') ? 14 : 10;
+    // Make Figma logo smaller
+    const isFigma = logo.includes('Figma.svg');
+    const logoSize = isFigma ? 60 : 80;
+    // Center the logo: (viewBox size - logo size) / 2
+    const logoXOffset = (100 - logoSize) / 2;
+    const logoYOffset = (100 - logoSize) / 2;
+    
+    // Use inline SVG for crisp rendering, fallback to image tag if not loaded yet
+    if (inlineSvgContent) {
+      const scale = logoSize / 100;
+      return (
+        <svg className={styles.svgContainer} fill="none" preserveAspectRatio="none" viewBox="0 0 100 100">
+          <defs>
+            {gradientDef}
+          </defs>
+          <rect fill={`url(#${gradientId})`} height="100" rx="50" width="100" x="0" y="0" />
+          <g transform={`translate(${logoXOffset}, ${logoYOffset}) scale(${scale})`}>
+            <svg
+              width="100"
+              height="100"
+              viewBox={inlineSvgContent.viewBox}
+              preserveAspectRatio="xMidYMid meet"
+              xmlns="http://www.w3.org/2000/svg"
+              dangerouslySetInnerHTML={{ __html: inlineSvgContent.content }}
+            />
+          </g>
+        </svg>
+      );
+    }
+    
+    // Fallback to image tag while loading
     return (
       <svg className={styles.svgContainer} fill="none" preserveAspectRatio="none" viewBox="0 0 100 100">
         <defs>
@@ -40,11 +72,15 @@ export function BubbleCollapsed({ logo, name }: BubbleCollapsedProps) {
         <rect fill={`url(#${gradientId})`} height="100" rx="50" width="100" x="0" y="0" />
         <image
           href={logo}
-          x={xOffset}
-          y={yOffset}
-          width="80"
-          height="80"
+          x={logoXOffset}
+          y={logoYOffset}
+          width={logoSize}
+          height={logoSize}
           preserveAspectRatio="xMidYMid meet"
+          style={{
+            imageRendering: 'auto',
+            shapeRendering: 'geometricPrecision',
+          }}
         />
       </svg>
     );

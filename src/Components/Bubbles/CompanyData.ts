@@ -89,7 +89,7 @@ export const CompanyData: Record<BubbleCategory, Company[]> = {
     {
       id: 11,
       name: 'Figma',
-      logo: undefined, // No logo file, will render as text
+      logo: '/images/Bubbles/Student Ambassadors/Figma.svg',
       description: 'Figma is a collaborative design platform dedicated to making design accessible to everyone through community-driven tools. They focus on creating global user communities, offering a range of educational programs and resources that cater to both students and professionals.',
       category: 'Student Ambassadors',
       link: 'https://www.figma.com/careers/',
@@ -97,7 +97,7 @@ export const CompanyData: Record<BubbleCategory, Company[]> = {
     {
       id: 12,
       name: 'CoPilot',
-      logo: undefined, // No logo file, will render as text
+      logo: '/images/Bubbles/Student Ambassadors/CoPilot.svg',
       description: 'CoPilot is an AI technology dedicated to boosting individual productivity and accelerating innovation in software development. They focus on developing intelligent coding assistance and streamlined development workflows, offering diverse educational resources and AI-powered tools.',
       category: 'Student Ambassadors',
       link: 'https://careers.microsoft.com/v2/global/en/home.html',
@@ -105,7 +105,7 @@ export const CompanyData: Record<BubbleCategory, Company[]> = {
     {
       id: 13,
       name: 'Claude',
-      logo: undefined, // No logo file, will render as text
+      logo: '/images/Bubbles/Student Ambassadors/Claude.svg',
       description: 'Developed by Anthropic, Claude is an AI research company dedicated to building safe and reliable large language models for widespread public use. They focus on developing trustworthy AI systems by facilitating tasks such as editing, search, and code-writing. Claude aims to be steerable and efficient for users.',
       category: 'Student Ambassadors',
       link: 'https://www.anthropic.com/careers',

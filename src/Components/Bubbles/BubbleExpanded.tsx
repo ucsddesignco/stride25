@@ -1,5 +1,6 @@
 import styles from './BubbleCluster.module.css';
 import { AoPSLogoPaths } from './AoPSLogoPaths';
+import { useInlineSVG } from './useInlineSVG';
 
 interface BubbleExpandedProps {
   description: string;
@@ -10,24 +11,63 @@ interface BubbleExpandedProps {
 }
 
 export function BubbleExpanded({ description, logo, name, category, link }: BubbleExpandedProps) {
+  // Load SVG content inline for crisp rendering
+  const inlineSvgData = useInlineSVG(logo);
+  
   return (
     <div className={styles.expandedBubble}>
       <div className={`${styles.logoContainer} ${styles.fadeInContent}`}>
         {logo ? (
           // If logo exists, render SVG image
-          <svg className={styles.logoSvg} fill="none" preserveAspectRatio="none" viewBox="0 0 100 100">
-            <g>
-              <rect fill="None" height="100" rx="50" width="100" />
-              <image
-                href={logo}
-                x="10"
-                y="10"
-                width="80"
-                height="80"
-                preserveAspectRatio="xMidYMid meet"
-              />
-            </g>
-          </svg>
+          (() => {
+            // Make Copilot and Claude logos larger
+            const isCopilotOrClaude = logo.includes('CoPilot.svg') || logo.includes('Claude.svg');
+            const imageSize = isCopilotOrClaude ? 95 : 80;
+            const imageOffset = (100 - imageSize) / 2;
+            const scale = imageSize / 100;
+            
+            // Use inline SVG for crisp rendering, fallback to image tag if not loaded yet
+            if (inlineSvgData) {
+              return (
+                <svg className={styles.logoSvg} fill="none" preserveAspectRatio="none" viewBox="0 0 100 100">
+                  <g>
+                    <rect fill="None" height="100" rx="50" width="100" />
+                    <g transform={`translate(${imageOffset}, ${imageOffset}) scale(${scale})`}>
+                      <svg
+                        width="100"
+                        height="100"
+                        viewBox={inlineSvgData.viewBox}
+                        preserveAspectRatio="xMidYMid meet"
+                        xmlns="http://www.w3.org/2000/svg"
+                        dangerouslySetInnerHTML={{ __html: inlineSvgData.content }}
+                      />
+                    </g>
+                  </g>
+                </svg>
+              );
+            }
+            
+            // Fallback to image tag while loading
+            return (
+              <svg className={styles.logoSvg} fill="none" preserveAspectRatio="none" viewBox="0 0 100 100">
+                <g>
+                  <rect fill="None" height="100" rx="50" width="100" />
+                  <image
+                    href={logo}
+                    x={imageOffset}
+                    y={imageOffset}
+                    width={imageSize}
+                    height={imageSize}
+                    preserveAspectRatio="xMidYMid meet"
+                    style={{
+                      imageRendering: 'auto',
+                      shapeRendering: 'geometricPrecision',
+                    }}
+                  />
+                </g>
+              </svg>
+            );
+          })()
         ) : name ? (
           // If no logo but name exists, render text with updated styling
           // Check if name contains parentheses for subtitle formatting
