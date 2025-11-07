@@ -50,14 +50,6 @@ export const CompanyData: Record<BubbleCategory, Company[]> = {
       category: 'Recruiting',
       link: 'https://www.ttvucsd.com/',
     },
-    {
-      id: 6,
-      name: 'Owaves',
-      logo: '/images/Bubbles/Recruiting/owaves.svg',
-      description: 'Owaves is focused on developing a holistic calendar that optimizes your circadian rhythm. They encourage sustainable life habits via planning tools and mobile applications. Their software incorporates input from leaders in mindfulness and more.',
-      category: 'Recruiting',
-      link: 'https://owaves.com/',
-    },
   ],
   Networking: [
     {
