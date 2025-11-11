@@ -29,7 +29,7 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
     {...props}
   />
 ))(({ theme }) => ({
-  backgroundColor: "rgba(0, 0, 0, .03)",
+  backgroundColor: "#0B273E",
   flexDirection: "row-reverse",
   alignItems: "flex-start",
   padding: `${theme.spacing(1)} ${theme.spacing(1)} ${theme.spacing(1)} ${theme.spacing(0.2)}`,
@@ -48,13 +48,12 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
     marginTop: theme.spacing(0.5),
     marginBottom: 0,
   },
-  ...theme.applyStyles("dark", {
-    backgroundColor: "rgba(255, 255, 255, .05)",
-  }),
 }));
 
 const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
-  padding: theme.spacing(2),
+  backgroundColor: "#0B273E",
+  padding: `0 ${theme.spacing(2)} ${theme.spacing(2)} ${theme.spacing(2)}`,
+  marginTop: 0,
 }));
 
 export default function CustomizedAccordions() {
@@ -72,7 +71,7 @@ export default function CustomizedAccordions() {
   return (
     <section id="faq">
       <div className="faqText">
-        <h1>Frequently Asked Questions</h1>
+        <h2>Frequently Asked Questions</h2>
         <p>
           Any other questions? Reach out via <a href="https://www.instagram.com/designcoatucsd/" target="_blank">Instagram</a> or{" "}
           <a href="mailto:designatucsd@gmail.com">designatucsd@gmail.com</a>
@@ -92,10 +91,10 @@ export default function CustomizedAccordions() {
                 aria-controls={`${item.question}d-content`}
                 id={`${item.question}d-header`}
               >
-                <Typography component="span">{item.question}</Typography>
+                <Typography component="span" sx={{ color: "#B8E5ED" }}>{item.question}</Typography>
               </AccordionSummary>
               <AccordionDetails>
-                <Typography>{item.answer}</Typography>
+                <Typography sx={{ color: "#B8E5ED" }}>{item.answer}</Typography>
               </AccordionDetails>
             </Accordion>
           ))}
@@ -113,10 +112,10 @@ export default function CustomizedAccordions() {
                 aria-controls={`${item.question}d-content`}
                 id={`${item.question}d-header`}
               >
-                <Typography component="span">{item.question}</Typography>
+                <Typography component="span" sx={{ color: "#B8E5ED" }}>{item.question}</Typography>
               </AccordionSummary>
               <AccordionDetails>
-                <Typography>{item.answer}</Typography>
+                <Typography sx={{ color: "#B8E5ED" }}>{item.answer}</Typography>
               </AccordionDetails>
             </Accordion>
           ))}

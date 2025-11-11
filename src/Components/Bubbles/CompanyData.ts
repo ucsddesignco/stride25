@@ -79,14 +79,6 @@ export const CompanyData: Record<BubbleCategory, Company[]> = {
   ],
   'Student Ambassadors': [
     {
-      id: 11,
-      name: 'Figma',
-      logo: '/images/Bubbles/Student Ambassadors/Figma.svg',
-      description: 'Figma is a collaborative design platform dedicated to making design accessible to everyone through community-driven tools. They focus on creating global user communities, offering a range of educational programs and resources that cater to both students and professionals.',
-      category: 'Student Ambassadors',
-      link: 'https://www.figma.com/careers/',
-    },
-    {
       id: 12,
       name: 'CoPilot',
       logo: '/images/Bubbles/Student Ambassadors/CoPilot.svg',

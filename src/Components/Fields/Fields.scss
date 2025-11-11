@@ -1,17 +1,19 @@
 .fields {
-  padding: 2rem 0;
+  margin-top: 80px;
+  padding-left: 6rem;
+  padding-right: 6rem;
 }
 
-.fields-wrapper {
-  width: 100%;
+.fields-content {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
 }
 
 .fields-container {
   width: 100%;
-  padding: 0 6rem;
-  overflow: hidden;
+  overflow: visible;
   box-sizing: border-box;
 
   &.no-scroll {
@@ -26,10 +28,6 @@
 
 .fields-title {
   color: #b8e5ed;
-  font-size: 2rem;
-  font-family: "Bricolage Grotesque";
-  font-weight: 700;
-  padding: 3.75rem 6rem 1.8rem 6rem;
 }
 
 .embla__container {
@@ -82,8 +80,11 @@
 }
 
 @media (min-width: 1441px) {
+  .fields {
+    padding-left: 18rem;
+    padding-right: 18rem;
+  }
   .fields-title {
-    padding: 3.75rem 18rem 1.8rem 18rem;
     overflow: visible;
   }
   .embla__container {
@@ -92,16 +93,17 @@
   }
   .fields-container {
     width: 100%;
-    padding: 0 18rem;
   }
 }
 @media (max-width: 766px) {
+  .fields {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
   .fields-title {
-    padding: 3.75rem 20px 1.8rem 20px;
     overflow: visible;
   }
   .fields-container {
     width: 100%;
-    padding: 0 20px;
   }
 }

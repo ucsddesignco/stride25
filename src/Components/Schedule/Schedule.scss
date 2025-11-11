@@ -16,12 +16,10 @@
   .title {
     color: #cbecf3;
     font-size: 1.2rem;
-    margin-bottom: 3rem;
+    margin-bottom: 0;
 
     h2 {
-      font-family: "Bricolage Grotesque";
-      font-size: 2rem;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
       text-align: left;
     }
     .outer{
@@ -49,7 +47,7 @@
   .info {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    gap: 32px;
     .times {
       display: flex;
       flex-direction: column;
@@ -123,7 +121,7 @@
 
       .schedule-img {
         height: 28rem;
-        padding-bottom: 2rem;
+        padding-bottom: 0;
       }
     }
   }

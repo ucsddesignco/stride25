@@ -6,10 +6,6 @@
     }
     .faqText{
         color: #B8E5ED;
-        h1{
-            font-family: "Bricolage Grotesque";
-            font-weight: bold;
-        }
         p{
             font-size: 0.9rem;
             font-family: "Bricolage Grotesque";
@@ -49,6 +45,7 @@
             span, p {
                 max-width: 1000px;
                 font-family: "Reddit Sans";
+                color: #B8E5ED;
                 // text-wrap: nowrap;
                 margin-left: 0.08rem;
                 // font-weight: 300;

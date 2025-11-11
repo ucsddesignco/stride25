@@ -14,10 +14,7 @@
     }
 
     h2 {
-        font-family: 'Bricolage Grotesque';
-        font-size: 2.5rem;
         text-align: left;
-        font-weight: 500;
         width: 100%;
         max-width: 1240px;
         margin: 0 auto;
@@ -42,13 +39,13 @@
         margin-bottom: 0.5rem;
         font-weight: 600;
         text-align: center;
+        line-height: 3.8rem;
     }
 
     .priceHero{
         flex-direction: row-reverse;
         padding: 8px 20px 8px 16px;
-
-
+        margin-top: 1rem;
     }
 }
 

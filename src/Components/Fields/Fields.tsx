@@ -73,10 +73,10 @@ export default function Fields() {
 
   return (
     <div className="fields">
-      <p className="fields-title">
-        Discover Fields Dedicated to Craft & Problem Solving
-      </p>
-      <div className="fields-wrapper">
+      <div className="fields-content">
+        <h2 className="fields-title">
+          Discover Fields Dedicated to Craft & Problem Solving
+        </h2>
         <div 
           className={`fields-container embla ${!canScroll ? 'no-scroll' : ''}`} 
           ref={emblaRef}

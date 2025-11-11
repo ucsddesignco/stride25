@@ -10,16 +10,7 @@
 
 .header {
   h2 {
-    font-weight: bold;
-    font-size: 24px;
     color: #c4e5ed;
-
-    @media (min-width: 768px) {
-      font-size: 32px;
-    }
-
-    @media (min-width: 1440px) {
-    }
   }
 
   p {
